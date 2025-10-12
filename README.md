@@ -13,7 +13,7 @@ Projet De l'UE Python Orientée Objet
 
 1. Cloner le dépôt
     ```sh
-    git clone url_de_mon_projet.git
+    git clone https://github.com/pola-sz/Projet-Python-OO-groupe-4-MeDH
     ```
 
 2. Créer un environnement virtuel
