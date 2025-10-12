@@ -1,0 +1,38 @@
+# Mon projet
+
+Projet De l'UE Python Orientée Objet
+
+ Une version simplifiée du jeu vidéo ”Blue Prince”
+
+## Prérequis
+
+- Python 3
+- pip
+
+## Installation
+
+1. Cloner le dépôt
+    ```sh
+    git clone url_de_mon_projet.git
+    ```
+
+2. Créer un environnement virtuel
+
+3. Installer les dépendances
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+
+## Utilisation
+
+```sh
+python main.py
+```
+
+## Contributeurs et contributrices
+Groupe 4 MeDH
+
+- Daniil Maksymenko
+- Mohamed Chabane 
+- Pola Szopka
