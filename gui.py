@@ -143,7 +143,7 @@ class GUI :
 
         for i, el in enumerate(inventory.object_list): 
             font = pygame.font.Font('freesansbold.ttf', 20)
-            text = font.render(el, True, "black")
+            text = font.render(str(el), True, "black")
             textRect = text.get_rect()
             cX = 575 if i %2 == 0 else 825
             cY = 300 + (i // 2) * 40
