@@ -62,6 +62,7 @@ class GUI :
 
         return input
     
+    
     def update_screen(self,input : dict) :
         """
         """ 
