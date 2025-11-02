@@ -4,5 +4,5 @@
 
 3) create inventory (inventory.py)
 
-4) fill function __update_inventory (gui.py)
+4) ~~fill function __update_inventory (gui.py)~~
 

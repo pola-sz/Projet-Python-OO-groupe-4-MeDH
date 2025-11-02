@@ -115,9 +115,40 @@ class GUI :
         Args:
             inventory (Inventory)
         """
-        pass
+        #print the white rectangle
+        pygame.draw.rect(self.screen, "white", pygame.Rect((450,50), (500, 620)))
 
-        
+        #print "Inventory"
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        text = font.render('Inventory : ', True, "black")
+        textRect = text.get_rect()
+        textRect.center = (700, 100)
+        self.screen.blit(text, textRect)
+
+        names = ("steps", "coins", "gems", "keys", "dices")
+        numbers = (inventory.steps, inventory.coins, inventory.gems, inventory.keys, inventory.dices)
+
+        for i in range(5) : 
+            
+            to_print = names[i] + " : " + str(numbers[i])
+            font = pygame.font.Font('freesansbold.ttf', 20)
+            text = font.render(to_print, True, "black")
+            textRect = text.get_rect()
+            cX = 575 if i %2 == 0 else 825
+            cY = 150 + (i // 2) * 40
+            textRect.center = (cX, cY )
+            self.screen.blit(text, textRect)
+
+        #print objects
+
+        for i, el in enumerate(inventory.object_list): 
+            font = pygame.font.Font('freesansbold.ttf', 20)
+            text = font.render(el, True, "black")
+            textRect = text.get_rect()
+            cX = 575 if i %2 == 0 else 825
+            cY = 300 + (i // 2) * 40
+            textRect.center = (cX, cY )
+            self.screen.blit(text, textRect)
     
         
     def quit() : 
