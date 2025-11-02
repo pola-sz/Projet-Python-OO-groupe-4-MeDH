@@ -68,6 +68,7 @@ class Engine :
             player_pos (list): current position of the player
             key (str): which key was pressed
             map (list): map of the rooms
+            inventory (Inventory) : current inventory
 
         Returns:
             list: new position of the player
@@ -93,9 +94,11 @@ class Engine :
                 new_player_pos[0] = max(0, new_player_pos[0])
                 new_player_pos[0] = min(new_player_pos[0], 4)
 
+            if not(new_player_pos == player_pos): 
+                inventory.steps -= 1
+
             if map[new_player_pos[1]][new_player_pos[0]] != None and (inventory.steps != 0): 
                 # if the room exists
-                inventory.steps -= 1
                 return new_player_pos, False, inventory
             else : 
                 #if it doesn't
@@ -106,5 +109,3 @@ class Engine :
 
     def __create_room() :
         pass
-
-    
