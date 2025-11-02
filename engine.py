@@ -79,30 +79,25 @@ class Engine :
             new_player_pos = player_pos.copy()
             if key == "UP":
                 new_player_pos[1] -= 1
-                new_player_pos[1] = max(0, new_player_pos[1])
-                new_player_pos[1] = min(new_player_pos[1], 8)
+
             elif key == "DOWN":
                 new_player_pos[1] += 1
-                new_player_pos[1] = max(0, new_player_pos[1])
-                new_player_pos[1] = min(new_player_pos[1], 8)
+
             elif key == "LEFT":
                 new_player_pos[0] -= 1
-                new_player_pos[0] = max(0, new_player_pos[0])
-                new_player_pos[0] = min(new_player_pos[0], 4)
+
             elif key == "RIGHT":
                 new_player_pos[0] += 1
-                new_player_pos[0] = max(0, new_player_pos[0])
-                new_player_pos[0] = min(new_player_pos[0], 4)
 
-            if not(new_player_pos == player_pos): 
-                inventory.steps -= 1
+            if (0 <= new_player_pos[0]) and (new_player_pos[0] <= 4) and (0 <= new_player_pos[1]) and (new_player_pos[1] <= 8) : 
 
-            if map[new_player_pos[1]][new_player_pos[0]] != None and (inventory.steps != 0): 
-                # if the room exists
-                return new_player_pos, False, inventory
-            else : 
-                #if it doesn't
-                return player_pos, True, inventory
+                if map[new_player_pos[1]][new_player_pos[0]] != None and (inventory.steps != 0): 
+                    # if the room exists and there are steps
+                    inventory.steps -= 1
+                    return new_player_pos, False, inventory
+                else : 
+                    #if it doesn't
+                    return player_pos, True, inventory
             
         return player_pos, False, inventory
     
