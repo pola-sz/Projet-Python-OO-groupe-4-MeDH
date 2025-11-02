@@ -51,8 +51,8 @@ class Engine :
                 player_pos = current_input["player_pos"]
                 map = current_input["map"]
                 key_pressed = current_input["key_pressed"]
-
-                new_input["player_pos"], new_input["ask_Create_room"] = Engine.__move_player(player_pos, key_pressed, map)
+                inventory = current_input["inventory"]
+                new_input["player_pos"], new_input["ask_Create_room"], new_input["inventory"] = Engine.__move_player(player_pos, key_pressed, map, inventory)
 
         return new_input
 
@@ -60,7 +60,7 @@ class Engine :
 
 
 
-    def __move_player(player_pos : list, key : str,  map : list) : 
+    def __move_player(player_pos : list, key : str,  map : list, inventory : Inventory) : 
         """
         Update the position of the player
 
@@ -93,14 +93,15 @@ class Engine :
                 new_player_pos[0] = max(0, new_player_pos[0])
                 new_player_pos[0] = min(new_player_pos[0], 4)
 
-            if map[new_player_pos[1]][new_player_pos[0]] != None : 
+            if map[new_player_pos[1]][new_player_pos[0]] != None and (inventory.steps != 0): 
                 # if the room exists
-                return new_player_pos, False
+                inventory.steps -= 1
+                return new_player_pos, False, inventory
             else : 
                 #if it doesn't
-                return player_pos, True
+                return player_pos, True, inventory
             
-        return player_pos, False
+        return player_pos, False, inventory
     
 
     def __create_room() :
