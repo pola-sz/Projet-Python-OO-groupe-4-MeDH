@@ -13,12 +13,13 @@ class Engine :
             dict: input dictionnary
         """
         input = {"player_pos" : [2, 8],
+                 "player_orient" : "N",
                  "running" : True, 
-                 "map" : [[None, None, "blue", None, None],
-                          [None, None, None, None, None],
-                          [None, None, None, None, None],
-                          [None, None, None, None, None],
-                          [None, None, None, None, None],
+                 "map" : [[None, None, "blue", "red", None],
+                          [None, None, None, "green", None],
+                          [None, None, None, "yellow", None],
+                          [None, None, None, "red", None],
+                          [None, None, None, "green", None],
                           [None, None, None, "yellow", None],
                           [None, None, None, "green", None],
                           ["yellow", "green", "red", "red", None],
@@ -26,7 +27,9 @@ class Engine :
                  "key_pressed" : None,
                  "inventory" : Inventory(),
                  "ask_Create_room" : False,
-                 "create_room" : False}
+                 "create_room" : False,
+                 "win" : False,
+                 "lose" : False}
         return input
 
     def interpret_input(current_input : dict) : 
@@ -39,6 +42,10 @@ class Engine :
         Returns:
             dict: New input
         """
+
+        if current_input["win"] or current_input["lose"] : 
+            return current_input
+
         new_input = current_input.copy()
 
         #if we are still running the game and not in the process of creating a room
@@ -52,15 +59,21 @@ class Engine :
                 map = current_input["map"]
                 key_pressed = current_input["key_pressed"]
                 inventory = current_input["inventory"]
-                new_input["player_pos"], new_input["ask_Create_room"], new_input["inventory"] = Engine.__move_player(player_pos, key_pressed, map, inventory)
+                player_orient = current_input["player_orient"]
+                new_input["player_pos"], new_input["player_orient"], new_input["ask_Create_room"], new_input["inventory"] = Engine.__move_player(player_pos, player_orient, key_pressed, map, inventory)
+            
+            if player_pos == [2, 0] : 
+                new_input["win"] = True
 
+            if inventory.steps == 0 : 
+                new_input["lose"] = True
         return new_input
 
 
 
 
 
-    def __move_player(player_pos : list, key : str,  map : list, inventory : Inventory) : 
+    def __move_player(player_pos : list, player_orient : str, key : str,  map : list, inventory : Inventory) : 
         """
         Update the position of the player
 
@@ -74,32 +87,59 @@ class Engine :
             list: new position of the player
             bool: flag indicating if we ask the player to create a room or not
         """
-        
+        new_orient = player_orient # default value
+
         if key != None : 
             new_player_pos = player_pos.copy()
-            if key == "UP":
+            if key == "UP" and player_orient == "N":
                 new_player_pos[1] -= 1
 
-            elif key == "DOWN":
+            elif key == "DOWN" and player_orient == "S":
                 new_player_pos[1] += 1
 
-            elif key == "LEFT":
+            elif key == "LEFT" and player_orient == "W":
                 new_player_pos[0] -= 1
 
-            elif key == "RIGHT":
+            elif key == "RIGHT" and player_orient == "E":
                 new_player_pos[0] += 1
+            
+            else :  
+                match player_orient : 
+                    case "N": 
+                        if key == "RIGHT": 
+                            new_orient = "E" 
+                        elif  key == "LEFT":
+                            new_orient = "W"
+                    case "S":
+                        if key == "RIGHT": 
+                            new_orient = "E" 
+                        elif  key == "LEFT":
+                            new_orient = "W"
+                    case "W":
+                        if key == "UP": 
+                            new_orient = "N" 
+                        elif  key == "DOWN":
+                            new_orient = "S"
+                    case "E":
+                        if key == "UP": 
+                            new_orient = "N" 
+                        elif  key == "DOWN":
+                            new_orient = "S"
+            
+
 
             if (0 <= new_player_pos[0]) and (new_player_pos[0] <= 4) and (0 <= new_player_pos[1]) and (new_player_pos[1] <= 8) : 
 
                 if map[new_player_pos[1]][new_player_pos[0]] != None and (inventory.steps != 0): 
                     # if the room exists and there are steps
-                    inventory.steps -= 1
-                    return new_player_pos, False, inventory
+                    if new_player_pos != player_pos : 
+                        inventory.steps -= 1
+                    return new_player_pos, new_orient, False, inventory
                 else : 
                     #if it doesn't
-                    return player_pos, True, inventory
+                    return player_pos, new_orient, True, inventory
             
-        return player_pos, False, inventory
+        return player_pos, new_orient, False, inventory
     
 
     def __create_room() :

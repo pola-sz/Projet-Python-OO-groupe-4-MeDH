@@ -66,7 +66,19 @@ class GUI :
     def update_screen(self,input : dict) :
         """
         """ 
-        if not(input["ask_Create_room"]):
+        if input["win"] or input["lose"] :
+            self.screen.fill("blue")
+            pygame.draw.rect(self.screen, "white", pygame.Rect((50, 50), (900, 620)))
+
+            font = pygame.font.Font('freesansbold.ttf', 30)
+            message = "You won !" if input["win"] else "You lost !"
+            text = font.render(message, True, "black")
+            textRect = text.get_rect()
+            textRect.center = (500, 360)
+            self.screen.blit(text, textRect)
+
+
+        elif not(input["ask_Create_room"]):
 
             self.screen.fill("blue")
             pygame.draw.rect(self.screen, "black", pygame.Rect((0, 0), (400, 720)))
@@ -75,25 +87,33 @@ class GUI :
             self.__update_map(map)
 
             player_pos = input["player_pos"]
-            self.__update_pos(player_pos)
+            player_orient = input["player_orient"]
+            self.__update_pos(player_pos, player_orient)
 
             inventory = input["inventory"]
             self.__update_inventory(inventory)
 
-            pygame.display.flip()
+            # to modify 
+            pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285)))
 
-    def __update_pos(self, player_pos : list) : 
+        pygame.display.flip()
+
+    def __update_pos(self, player_pos : list, player_orient : str) : 
         """
         Update the position of the player on the screen
 
         Args:
             player_pos (list): list with the player's position [x, y]
         """
-
-        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
-        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
-        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
-        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+        match player_orient : 
+            case "N" :
+                pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
+            case "W" : 
+                pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+            case "S":
+                pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
+            case "E" : 
+                pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
         
     def __update_map(self, map : list) : 
         """
@@ -116,26 +136,20 @@ class GUI :
             inventory (Inventory)
         """
         #print the white rectangle
-        pygame.draw.rect(self.screen, "white", pygame.Rect((450,50), (500, 620)))
+        pygame.draw.rect(self.screen, "white", pygame.Rect((450,50), (500, 285)))
 
-        #print "Inventory"
-        font = pygame.font.Font('freesansbold.ttf', 30)
-        text = font.render('Inventory : ', True, "black")
-        textRect = text.get_rect()
-        textRect.center = (700, 100)
-        self.screen.blit(text, textRect)
 
         names = ("steps", "coins", "gems", "keys", "dices")
         numbers = (inventory.steps, inventory.coins, inventory.gems, inventory.keys, inventory.dices)
 
         for i in range(5) : 
             
-            to_print = names[i] + " : " + str(numbers[i])
+            to_print = str(numbers[i]) + " " + names[i]
             font = pygame.font.Font('freesansbold.ttf', 20)
             text = font.render(to_print, True, "black")
             textRect = text.get_rect()
-            cX = 575 if i %2 == 0 else 825
-            cY = 150 + (i // 2) * 40
+            cX = 575 + (i % 3) * 125
+            cY = 100 + (i // 3) * 40
             textRect.center = (cX, cY )
             self.screen.blit(text, textRect)
 
@@ -145,8 +159,9 @@ class GUI :
             font = pygame.font.Font('freesansbold.ttf', 20)
             text = font.render(str(el), True, "black")
             textRect = text.get_rect()
-            cX = 575 if i %2 == 0 else 825
-            cY = 300 + (i // 2) * 40
+            cX = 575 + (i % 3) * 125
+            cY = 200 + (i // 3) * 40
+
             textRect.center = (cX, cY )
             self.screen.blit(text, textRect)
     
