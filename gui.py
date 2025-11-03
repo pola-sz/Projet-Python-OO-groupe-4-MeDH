@@ -70,7 +70,7 @@ class GUI :
             self.screen.fill("blue")
             pygame.draw.rect(self.screen, "white", pygame.Rect((50, 50), (900, 620)))
 
-            font = pygame.font.Font('freesansbold.ttf', 30)
+            font = pygame.font.Font('freesansbold.ttf', 100)
             message = "You won !" if input["win"] else "You lost !"
             text = font.render(message, True, "black")
             textRect = text.get_rect()
