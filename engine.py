@@ -1,5 +1,5 @@
 from inventory import Inventory
-
+from rooms import Rooms, create_room
 class Engine : 
 
     def __init__(self) : 
@@ -15,15 +15,7 @@ class Engine :
         input = {"player_pos" : [2, 8],
                  "player_orient" : "N",
                  "running" : True, 
-                 "map" : [[None, None, "blue", "red", None],
-                          [None, None, None, "green", None],
-                          [None, None, None, "yellow", None],
-                          [None, None, None, "red", None],
-                          [None, None, None, "green", None],
-                          [None, None, None, "yellow", None],
-                          [None, None, None, "green", None],
-                          ["yellow", "green", "red", "red", None],
-                          [None, "red", "blue", "yellow", None]],
+                 "map" : Engine.initialize_map(),
                  "key_pressed" : None,
                  "inventory" : Inventory(),
                  "ask_Create_room" : False,
@@ -31,7 +23,20 @@ class Engine :
                  "win" : False,
                  "lose" : False}
         return input
-
+    
+    def initialize_map():
+        start = create_room(start=True)
+        end = create_room(end=True)
+        return [[None, None, end , None, None],
+                [None, None,None , None, None],
+                [None, None,None , None, None],
+                [None, None,None , None, None],
+                [None, None,None , None, None],
+                [None, None,None , None, None],
+                [None, None,None , None, None],
+                [None, None,None , None, None],
+                [None, None, start , None, None]]
+    
     def interpret_input(current_input : dict) : 
         """
         Update the input in regards to the keys pressed by the user

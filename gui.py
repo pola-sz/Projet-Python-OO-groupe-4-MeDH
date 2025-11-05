@@ -125,7 +125,10 @@ class GUI :
         for i in range(9) : 
             for j in range(5) : 
                 if map[i][j] != None : 
-                    pygame.draw.rect(self.screen, map[i][j], pygame.Rect((j * WIDTH, i * WIDTH), (WIDTH, WIDTH)))
+                    room = map[i][j]
+                    image = pygame.image.load(room.image)
+                    image = pygame.transform.scale(image, (WIDTH, WIDTH))
+                    self.screen.blit(image, (j * WIDTH, i * WIDTH))
         
 
     def __update_inventory(self, inventory : Inventory) : 

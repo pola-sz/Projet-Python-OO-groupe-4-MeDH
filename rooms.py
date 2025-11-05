@@ -1,16 +1,31 @@
-class Rooms :
+from abc import ABC, abstractmethod
+import random
+
+class Rooms(ABC) :
     possible_door_states = {"open","locked","dlocked","none"}
     possible_door_locations = {"N","S","E","W"}
     possible_colors = {"blue","yellow","purple","red","orange","green"}
 
-    def __init__(self,color,rarity,doors):
+    def __init__(self, name : str, image : str, doors : dict, cost : int, rarity : int):
+        """Create a room
+
+        Args:
+            name (str): name of the room
+            image (str): relative path to the image
+            doors (dict): example = {"N":"open","S":"open","E":"open","W":"open"}
+            cost (int): cost in gems
+            rarity (int): rarity from 0 to 3
+        """
+        self.name = name
+        self.image = image
+        self.cost = cost
+        self.objects = []
         self.doors = doors
-        self.color = color
-        self.rarity = rarity
-        self.probability = 0
+        self.__rarity = rarity
+        self.__probability = 0 
         
 
-    @doors.setter
+    """@doors.setter
     def doors(self,portes : dict):
         if not isinstance(portes,dict):
             raise TypeError("These are not dictionaries")
@@ -23,13 +38,6 @@ class Rooms :
             
         self.__doors = portes
 
-    @color.setter
-    def color(self,couleur):
-        if not isinstance(couleur,str):
-            raise TypeError("Color is not a string")
-        if couleur not in self.possible_colors:
-            raise ValueError("The color doesn't exist")
-        self.__color = couleur
 
     @rarity.setter
     def rarity(self,nbr):
@@ -49,30 +57,53 @@ class Rooms :
             raise TypeError("Probability is not a float dog")
         self.__probability = prob/(3**self.rarity)
 
+    """
+
+    @abstractmethod
+    def create_objects(self) : 
+        pass
+
 
 class Green_Room(Rooms):
     def __init__(self, rarity,doors):
-        super().__init__("green", rarity,doors)  
+        super().__init__("green", rarity,doors) 
+    def create_objects(self) : 
+        pass
 
 class Blue_Room(Rooms):
-    def __init__(self, rarity,doors):
-        super().__init__("blue", rarity,doors)      
+    def __init__(self, name, image, doors, cost, rarity):
+        super().__init__( name, image, doors, cost, rarity)      
+    def create_objects(self) : 
+        pass
 
 class Yellow_Room(Rooms):
     def __init__(self, rarity,doors):
         super().__init__("yellow", rarity,doors)  
 
+    def create_objects(self) : 
+        pass
+
 class Purple_Room(Rooms):
     def __init__(self, rarity,doors):
         super().__init__("purple", rarity,doors)  
 
+    def create_objects(self) : 
+        pass
+
 class Red_Room(Rooms):
     def __init__(self, rarity,doors):
-        super().__init__("red", rarity,doors)  
+        super().__init__("red", rarity,doors) 
+
+    def create_objects(self) : 
+        pass
 
 class Orange_Room(Rooms):
     def __init__(self, rarity,doors):
         super().__init__("orange", rarity,doors)    
+    
+    def create_objects(self) : 
+        pass
+    
 
 # for rarity 
 # commonplace = 0
@@ -80,6 +111,33 @@ class Orange_Room(Rooms):
 # Unusual = 2
 # Rare = 3
 
+def create_room(start = False, end = False):
+    global start_end_room
+    global rooms
+    if start : 
+        return start_end_room[0]
+    elif end : 
+        return start_end_room[1]
+    else : 
+        r = random.randint(0, len(rooms) - 1)
+        return rooms[r]
+
+    
+start_end_room = [Blue_Room("entrance", "Rooms & Icons\Blue Rooms\Entrance_Hall_Icon.webp", {"N":"open","S":"open","E":"open","W":"open"}, 0, 0),
+                  Blue_Room("antechamber", "Rooms & Icons\Blue Rooms\Antechamber_Icon.webp", {"N":"open","S":"open","E":"open","W":"open"}, 0, 0)
+
+]
+rooms = [
+    Blue_Room("pantry", "Rooms & Icons\Blue Rooms\Pantry_Icon.webp", {"N":"open","S":"open","E":"open","W":"open"}, 0, 0),
+    Blue_Room("den", "Rooms & Icons\Blue Rooms\Den_Icon.webp", {"N":"none","S":"open","E":"none","W":"open"}, 2, 0),
+    Blue_Room("Trophy_room", "Rooms & Icons\Blue Rooms\Trophy_Room_Icon.webp, ", {"N":"none","S":"open","E":"none","W":"open"},1, 0 )
+
+]
+
+
+
+
+"""
 All_Green_Rooms = {
     "cloister": Green_Room(2,{"N":"open","S":"open","E":"open","W":"open"}),
     "courtyard": Green_Room(1,{"N":"none","S":"open","E":"open","W":"open"}),
@@ -89,4 +147,4 @@ All_Green_Rooms = {
     "secret garden": Green_Room(3,{"N":"none","S":"open","E":"open","W":"open"}),
     "terrace": Green_Room(1,{"N":"none","S":"open","E":"none","W":"none"}),
     "veranda": Green_Room(2,{"N":"open","S":"open","E":"none","W":"none"})
-}
+}"""
