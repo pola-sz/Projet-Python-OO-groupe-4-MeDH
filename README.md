@@ -34,5 +34,5 @@ python main.py
 Groupe 4 MeDH
 
 - Daniil Maksymenko
-- Mohamed Chabane 
+- Mohamed Yacine Chabane 
 - Pola Szopka
