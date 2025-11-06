@@ -1,5 +1,7 @@
 from inventory import Inventory
-from rooms import Rooms, create_room
+from rooms import Rooms, create_room, rooms
+import numpy as np
+
 class Engine : 
 
     def __init__(self) : 
@@ -226,3 +228,18 @@ class Engine :
                 doors["W"] = temp["S"]
                 doors["E"] = temp["N"]
 
+    # an attempt at three rooms
+    def three_rooms():
+        total_prob = 0
+        current_prob = []
+        for R in rooms:
+            if R.__rarity == 0:
+                total_prob += 1
+                current_prob.append(1)
+            else:
+                total_prob += 1/(3**R.__rarity)
+                current_prob.append(1/(3**R.__rarity))
+        final_prob = np.array(current_prob)/total_prob
+
+        
+        
