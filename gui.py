@@ -160,7 +160,7 @@ class GUI :
 
         #print objects
 
-        for i, el in enumerate(inventory.object_list): 
+        """ for i, el in enumerate(inventory.object_list): 
             font = pygame.font.Font('freesansbold.ttf', 20)
             text = font.render(str(el), True, "black")
             textRect = text.get_rect()
@@ -168,7 +168,34 @@ class GUI :
             cY = 200 + (i // 3) * 40
 
             textRect.center = (cX, cY )
-            self.screen.blit(text, textRect)
+            self.screen.blit(text, textRect) """
+        
+        """ if inventory.object_list != "empty":
+            pass
+            print(inventory.object_list)
+        else:
+            print(inventory.object_list)
+            i= 1
+            font = pygame.font.Font('freesansbold.ttf', 20)
+            text = font.render("goulash", True, "black")
+            textRect = text.get_rect()
+            cX = 575 + (i % 3) * 125
+            cY = 200 + (i // 3) * 40
+
+            textRect.center = (cX, cY )
+            self.screen.blit(text, textRect) """
+        i=0
+        for key, value in inventory.object_list.__dict__.items(): 
+            if value == True:
+                font = pygame.font.Font('freesansbold.ttf', 20)
+                text = font.render(str(key), True, "black")
+                textRect = text.get_rect()
+                cX = 575 + (i % 3) * 150
+                cY = 200 + (i // 3) * 40
+
+                textRect.center = (cX, cY )
+                self.screen.blit(text, textRect)
+                i+=1
     
         
     def quit() : 

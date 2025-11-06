@@ -100,7 +100,7 @@ class Engine :
         new_orient = player_orient # default value
 
         if key != None : 
-            print(f"key={key}, orient={player_orient}, pos={player_pos}, doors={map[player_pos[1]][player_pos[0]].doors}")
+            #print(f"key={key}, orient={player_orient}, pos={player_pos}, doors={map[player_pos[1]][player_pos[0]].doors}")
             new_player_pos = player_pos.copy()
             if key == "UP" and player_orient == "N":
                 if map[new_player_pos[1]][new_player_pos[0]].doors["N"] != "none":
@@ -158,6 +158,7 @@ class Engine :
                     opposite = {"N":"S","S":"N","W":"E","E":"W"}
                     current_door = map[player_pos[1]][player_pos[0]].doors[player_orient]
                     next_door = map[new_player_pos[1]][new_player_pos[0]].doors[opposite[player_orient]]
+
                     if ( current_door != "none")  and (next_door != "none"):
                         if new_player_pos != player_pos : 
                             inventory.steps -= 1
@@ -173,6 +174,11 @@ class Engine :
     
 
     def __create_room(state : dict) :
+        """
+        Create a new room based on the player's current position and orientation.
+        Args:
+            state (dict): current input 
+        """
         new_room = create_room()
         col,row = state["player_pos"]
         match state["player_orient"]:
@@ -194,6 +200,12 @@ class Engine :
                 state["map"][row][col+1] = new_room
 
     def __spin(doors : dict, orientation : int):
+        """
+        orients the rooms according to the player's orientation
+        Args:
+            doors (dict): doors of the room
+            orientation (int): orientation of the room
+        """
         temp = doors.copy()
         match orientation:
             case 0:
@@ -213,3 +225,4 @@ class Engine :
                 doors["S"] = temp["E"]
                 doors["W"] = temp["S"]
                 doors["E"] = temp["N"]
+
