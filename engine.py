@@ -83,8 +83,6 @@ class Engine :
             new_input["create_room"] = True
         return new_input
 
-
-
     def __move_player(player_pos : list, player_orient : str, key : str,  map : list, inventory : Inventory) : 
         """
         Update the position of the player
@@ -230,16 +228,20 @@ class Engine :
 
     # an attempt at three rooms
     def three_rooms():
+        """
+        Selects three rooms based on their rarity.
+        """
         total_prob = 0
         current_prob = []
         for R in rooms:
-            if R.__rarity == 0:
+            if R.rarity == 0:
                 total_prob += 1
                 current_prob.append(1)
             else:
-                total_prob += 1/(3**R.__rarity)
-                current_prob.append(1/(3**R.__rarity))
+                total_prob += 1/(3**R.rarity)
+                current_prob.append(1/(3**R.rarity))
         final_prob = np.array(current_prob)/total_prob
+        room_options = np.random.choice(a=rooms,size=3,replace=False,p=final_prob)
 
         
         
