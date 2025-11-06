@@ -32,8 +32,8 @@ class GUI :
                 return input
         
         
-        if input["ask_Create_room"] : 
-            input["ask_Create_room"] = False 
+        """ if input["ask_Create_room"] : 
+            input["ask_Create_room"] = False  """
 
         if len(event_queue) != 0 : 
 
@@ -83,11 +83,12 @@ class GUI :
             self.screen.fill("blue")
             pygame.draw.rect(self.screen, "black", pygame.Rect((0, 0), (400, 720)))
 
+            player_orient = input["player_orient"]
             map = input["map"]
             self.__update_map(map)
 
             player_pos = input["player_pos"]
-            player_orient = input["player_orient"]
+            
             self.__update_pos(player_pos, player_orient)
 
             inventory = input["inventory"]
@@ -128,6 +129,7 @@ class GUI :
                     room = map[i][j]
                     image = pygame.image.load(room.image)
                     image = pygame.transform.scale(image, (WIDTH, WIDTH))
+                    image = pygame.transform.rotate(image,room.orientation)
                     self.screen.blit(image, (j * WIDTH, i * WIDTH))
         
 
