@@ -1,5 +1,6 @@
 import pygame
 from inventory import Inventory
+from rooms import Rooms, create_room, rooms
 
 WIDTH = 80 # Width of a room
 HEIGHT = 8 #Height of the player
@@ -89,7 +90,7 @@ class GUI :
 
             player_pos = input["player_pos"]
             
-            self.__update_pos(player_pos, player_orient)
+            self.__update_pos(player_pos, player_orient,map)
 
             inventory = input["inventory"]
             self.__update_inventory(inventory)
@@ -99,22 +100,106 @@ class GUI :
 
         pygame.display.flip()
 
-    def __update_pos(self, player_pos : list, player_orient : str) : 
+    def __update_pos(self, player_pos : list, player_orient : str, map : list[Rooms]) : 
         """
         Update the position of the player on the screen
 
         Args:
             player_pos (list): list with the player's position [x, y]
         """
+        current_door_north = map[player_pos[1]][player_pos[0]].doors["N"]
+        current_door_south = map[player_pos[1]][player_pos[0]].doors["S"]
+        current_door_east = map[player_pos[1]][player_pos[0]].doors["E"]
+        current_door_west = map[player_pos[1]][player_pos[0]].doors["W"]
+
+        current_room = map[player_pos[1]][player_pos[0]]
+        if player_pos[1] != 0:
+            next_room_north = map[player_pos[1]-1][player_pos[0]]
+        else:
+            next_room_north = None  
+        if player_pos[1] != 8:
+            next_room_south = map[player_pos[1]+1][player_pos[0]]
+        else:
+            next_room_south = None    
+        if player_pos[0] != 4:
+            next_room_east = map[player_pos[1]][player_pos[0]+1]
+        else:
+            next_room_east = None
+        if player_pos[0] != 0:
+            next_room_west = map[player_pos[1]][player_pos[0]-1]
+        else:
+            next_room_west = None
+
+        if next_room_north != None:
+            next_door_north = map[player_pos[1]-1][player_pos[0]].doors["S"]
+        if next_room_south != None:
+            next_door_south = map[player_pos[1]+1][player_pos[0]].doors["N"]
+        if next_room_east != None:
+            next_door_east = map[player_pos[1]][player_pos[0]+1].doors["W"]
+        if next_room_west != None:
+            next_door_west = map[player_pos[1]][player_pos[0]-1].doors["E"]        
+
         match player_orient : 
             case "N" :
-                pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
+                if next_room_north == None:
+                    if current_door_north == "open":
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
+                    elif current_door_north == "none":
+                        pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
+                else :
+                    if current_door_north == "open" and next_door_north == "open":
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
+                    elif current_door_north == "none" or next_door_north == "none":
+                        pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
+            
             case "W" : 
-                pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                if next_room_west == None:
+                    if current_door_west == "open":
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                    elif current_door_west == "none":
+                        pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                else :
+                    if current_door_west == "open" and next_door_west == "open":
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                    elif current_door_west == "none" or next_door_west == "none":
+                        pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+            
             case "S":
-                pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
+                if next_room_south == None:
+                    if current_door_south == "open":
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
+                    elif current_door_south == "none":
+                        pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
+                else :
+                    if current_door_south == "open" and next_door_south == "open":
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
+                    elif current_door_south == "none" or next_door_south == "none":
+                        pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
+            
             case "E" : 
-                pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                if next_room_east == None:
+                    if current_door_east == "open":
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                    elif current_door_east == "none":
+                        pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                else :
+                    if current_door_east == "open" and next_door_east == "open":
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                    elif current_door_east == "none" or next_door_east == "none":
+                        pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+            
+                
+                """
+                 match player_orient : 
+                    case "N" :
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
+                    case "W" : 
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                    case "S":
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
+                    case "E" : 
+                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                """
         
     def __update_map(self, map : list) : 
         """
