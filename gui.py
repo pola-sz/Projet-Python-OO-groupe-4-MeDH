@@ -33,30 +33,30 @@ class GUI :
                 return input
         
 
-        if len(event_queue) != 0 : 
+        if len(event_queue) != 0:
+            for event in event_queue:
+                if event.type == pygame.KEYDOWN:
+                    input["key_pressed"] = None
 
-            if event.type == pygame.KEYDOWN:
-                self.previous = True
-                self.previous_key = pygame.key.get_pressed()
-                input["key_pressed"] = None
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_RETURN:
+                        input["key_pressed"] = "RETURN"
+                        
+                    elif event.key == pygame.K_SPACE:
+                        input["key_pressed"] = "SPACE"
+                        
+                    elif event.key == pygame.K_UP:
+                        input["key_pressed"] = "UP"
+                        
+                    elif event.key == pygame.K_DOWN:
+                        input["key_pressed"] = "DOWN"
+                        
+                    elif event.key == pygame.K_LEFT:
+                        input["key_pressed"] = "LEFT"
+                        
+                    elif event.key == pygame.K_RIGHT:
+                        input["key_pressed"] = "RIGHT"
 
-            elif (event.type == pygame.KEYUP) and (self.previous) : 
-                self.previous = False
-
-                if self.previous_key[pygame.K_BACKSPACE]:
-                    input["key_pressed"] = "BACKSPACE"
-
-                elif self.previous_key[pygame.K_UP]:
-                    input["key_pressed"] = "UP"
-
-                elif self.previous_key[pygame.K_DOWN]:
-                    input["key_pressed"] = "DOWN"
-
-                elif self.previous_key[pygame.K_LEFT]:
-                    input["key_pressed"] = "LEFT"
-
-                elif self.previous_key[pygame.K_RIGHT]:
-                    input["key_pressed"] = "RIGHT"
             
         else : 
             input["key_pressed"] = None

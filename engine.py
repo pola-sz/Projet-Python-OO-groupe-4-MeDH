@@ -228,7 +228,7 @@ class Engine :
             cursor = min(cursor + 1, 2)
         elif key == "LEFT" : 
             cursor = max(cursor - 1, 0)
-        elif key == "BACKSPACE" : 
+        elif key == "RETURN" or key == "SPACE" : 
             new_input["ask_Create_room"] = False
             new_input["cursor"] = None
             new_input["room_option"] = None
