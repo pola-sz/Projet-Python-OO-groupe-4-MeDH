@@ -225,10 +225,8 @@ class Engine :
         new_input = current_input.copy()
 
         if key == "RIGHT" : 
-            print(1)
             cursor = min(cursor + 1, 2)
         elif key == "LEFT" : 
-            print(2)
             cursor = max(cursor - 1, 0)
         elif key == "BACKSPACE" : 
             new_input["ask_Create_room"] = False
