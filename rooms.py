@@ -131,7 +131,7 @@ start_end_room = [Blue_Room("entrance", "Rooms & Icons\Blue Rooms\Entrance_Hall_
 
 ]
 rooms = [
-    Blue_Room("Pantry", "Rooms & Icons\Blue Rooms\Pantry_Icon.webp", {"N":"open","S":"open","E":"open","W":"open"}, 0, 0),
+    Blue_Room("Pantry", "Rooms & Icons\Blue Rooms\Pantry_Icon.webp", {"N":"none","S":"open","E":"none","W":"open"}, 0, 0),
     Blue_Room("Den", "Rooms & Icons\Blue Rooms\Den_Icon.webp", {"N":"none","S":"open","E":"open","W":"open"}, 0, 0),
     Blue_Room("Trophy_room", "Rooms & Icons\Blue Rooms\Trophy_Room_Icon.webp", {"N":"none","S":"open","E":"none","W":"open"},0, 3),
     
