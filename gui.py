@@ -32,9 +32,6 @@ class GUI :
                 input["running"] = False
                 return input
         
-        
-        """ if input["ask_Create_room"] : 
-            input["ask_Create_room"] = False  """
 
         if len(event_queue) != 0 : 
 
@@ -46,7 +43,10 @@ class GUI :
             elif (event.type == pygame.KEYUP) and (self.previous) : 
                 self.previous = False
 
-                if self.previous_key[pygame.K_UP]:
+                if self.previous_key[pygame.K_BACKSPACE]:
+                    input["key_pressed"] = "BACKSPACE"
+
+                elif self.previous_key[pygame.K_UP]:
                     input["key_pressed"] = "UP"
 
                 elif self.previous_key[pygame.K_DOWN]:
@@ -79,7 +79,7 @@ class GUI :
             self.screen.blit(text, textRect)
 
 
-        elif not(input["ask_Create_room"]):
+        else:
 
             self.screen.fill("blue")
             pygame.draw.rect(self.screen, "black", pygame.Rect((0, 0), (400, 720)))
@@ -95,8 +95,15 @@ class GUI :
             inventory = input["inventory"]
             self.__update_inventory(inventory)
 
-            # to modify 
             pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285)))
+
+            if input["ask_Create_room"] : 
+                room_option = input["room_option"]
+                cursor = input["cursor"]
+                self.__update_ask_room(room_option, cursor)
+            
+
+
 
         pygame.display.flip()
 
@@ -107,12 +114,13 @@ class GUI :
         Args:
             player_pos (list): list with the player's position [x, y]
         """
-        current_door_north = map[player_pos[1]][player_pos[0]].doors["N"]
-        current_door_south = map[player_pos[1]][player_pos[0]].doors["S"]
-        current_door_east = map[player_pos[1]][player_pos[0]].doors["E"]
-        current_door_west = map[player_pos[1]][player_pos[0]].doors["W"]
-
         current_room = map[player_pos[1]][player_pos[0]]
+        current_door_north = current_room.doors["N"]
+        current_door_south = current_room.doors["S"]
+        current_door_east = current_room.doors["E"]
+        current_door_west = current_room.doors["W"]
+
+        
         if player_pos[1] != 0:
             next_room_north = map[player_pos[1]-1][player_pos[0]]
         else:
@@ -189,17 +197,7 @@ class GUI :
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
             
                 
-                """
-                 match player_orient : 
-                    case "N" :
-                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
-                    case "W" : 
-                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
-                    case "S":
-                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
-                    case "E" : 
-                        pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
-                """
+                
         
     def __update_map(self, map : list) : 
         """
@@ -282,7 +280,18 @@ class GUI :
                 self.screen.blit(text, textRect)
                 i+=1
     
-        
+    def __update_ask_room(self, room_option : list, cursor : int):
+
+        for i, room in enumerate(room_option) : 
+            image = pygame.image.load(room.image)
+            image = pygame.transform.scale(image, (150, 150))
+            self.screen.blit(image, (463 + (i * 162), 390))
+
+        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), 390), (150, HEIGHT)))
+        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), 390), (HEIGHT, 150)))
+        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), 390 + (150 - HEIGHT)), (150, HEIGHT)))
+        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162) + (150 - HEIGHT), 390), (HEIGHT, 150)))
+  
     def quit() : 
         """
         quit the pygame  window

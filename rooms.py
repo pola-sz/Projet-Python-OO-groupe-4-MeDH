@@ -74,8 +74,8 @@ class Green_Room(Rooms):
         pass
 
 class Blue_Room(Rooms):
-    def __init__(self, name, image, doors, cost, rarity, orientation):
-        super().__init__(name, image, doors, cost, rarity, orientation)
+    def __init__(self, name, image, doors, cost, rarity):
+        super().__init__(name, image, doors, cost, rarity)
     def create_objects(self) : 
         pass
 
