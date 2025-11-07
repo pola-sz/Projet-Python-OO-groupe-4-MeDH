@@ -241,7 +241,11 @@ class Engine :
                 total_prob += 1/(3**R.rarity)
                 current_prob.append(1/(3**R.rarity))
         final_prob = np.array(current_prob)/total_prob
-        room_options = np.random.choice(a=rooms,size=3,replace=False,p=final_prob)
+        flag = True
+        while flag: 
+            room_options = np.random.choice(a=rooms,size=3,replace=False,p=final_prob)
+            room1, room2, room3 = room_options
+            flag = not(room1.cost == 0 or  room2.cost == 0 or room3.cost == 0)
 
         
         
