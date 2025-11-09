@@ -306,6 +306,11 @@ class Engine :
             new_input["room_option"] = None
 
             new_input["map"] = Engine.__create_room(current_input, room_option[cursor])
+        elif key == "ESCAPE":
+            new_input["ask_Create_room"] = False
+            new_input["cursor"] = None
+            new_input["room_option"] = None
+            
         new_input["cursor"] = cursor
         return new_input
 

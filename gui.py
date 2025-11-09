@@ -45,6 +45,9 @@ class GUI :
                     elif event.key == pygame.K_SPACE:
                         input["key_pressed"] = "SPACE"
                         
+                    elif event.key == pygame.K_ESCAPE:
+                        input["key_pressed"] = "ESCAPE"
+                        
                     elif event.key == pygame.K_UP:
                         input["key_pressed"] = "UP"
                         
