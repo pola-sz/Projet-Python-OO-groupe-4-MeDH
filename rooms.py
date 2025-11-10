@@ -66,6 +66,10 @@ class Rooms(ABC) :
     def create_objects(self) : 
         pass
 
+    @abstractmethod
+    def copy():
+        pass
+
 
 class Green_Room(Rooms):
     def __init__(self, rarity,doors):
@@ -76,8 +80,12 @@ class Green_Room(Rooms):
 class Blue_Room(Rooms):
     def __init__(self, name, image, doors, cost, rarity):
         super().__init__(name, image, doors, cost, rarity)
+
     def create_objects(self) : 
         pass
+
+    def copy(self):
+        return Blue_Room(self.name, self.image, self.doors.copy(), self.cost, self.rarity)
 
 class Yellow_Room(Rooms):
     def __init__(self, rarity,doors):

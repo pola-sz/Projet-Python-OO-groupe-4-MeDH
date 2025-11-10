@@ -169,6 +169,7 @@ class Engine :
         Returns:
             list: new map
         """
+        new_room = new_room.copy()
         col,row = input["player_pos"]
         map = input["map"].copy()
         match input["player_orient"]:
