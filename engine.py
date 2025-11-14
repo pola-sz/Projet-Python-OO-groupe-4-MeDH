@@ -22,6 +22,7 @@ class Engine :
                  "inventory" : Inventory(),
                  "ask_Create_room" : False,
                  "cursor" : None,
+                 "cursor_color" : "white",
                  "room_option" : None,
                  "win" : False,
                  "lose" : False}
@@ -223,19 +224,28 @@ class Engine :
         cursor = current_input["cursor"]
         key = current_input["key_pressed"]
         room_option = current_input["room_option"]
+        inventory = current_input["inventory"]
         new_input = current_input.copy()
+
+        cursor_color = "white" if room_option[cursor].cost <= inventory.gems else "red"
 
         if key == "RIGHT" : 
             cursor = min(cursor + 1, 2)
+            
         elif key == "LEFT" : 
             cursor = max(cursor - 1, 0)
-        elif key == "RETURN" or key == "SPACE" : 
-            new_input["ask_Create_room"] = False
-            new_input["cursor"] = None
-            new_input["room_option"] = None
 
-            new_input["map"] = Engine.__create_room(current_input, room_option[cursor])
+        elif key == "RETURN" or key == "SPACE" : 
+            if room_option[cursor].cost <= inventory.gems :
+                inventory.gems -= room_option[cursor].cost
+                new_input["inventory"] = inventory
+                new_input["ask_Create_room"] = False
+                new_input["cursor"] = None
+                new_input["room_option"] = None
+                new_input["cursor_color"] = None
+                new_input["map"] = Engine.__create_room(current_input, room_option[cursor])
         new_input["cursor"] = cursor
+        new_input["cursor_color"] = cursor_color
         return new_input
 
 
@@ -248,13 +258,13 @@ class Engine :
         """
         total_prob = 0
         current_prob = []
-        for R in rooms:
-            if R.rarity == 0:
+        for r in rooms:
+            if r.rarity == 0:
                 total_prob += 1
                 current_prob.append(1)
             else:
-                total_prob += 1/(3**R.rarity)
-                current_prob.append(1/(3**R.rarity))
+                total_prob += 1/(3**r.rarity)
+                current_prob.append(1/(3**r.rarity))
         final_prob = np.array(current_prob)/total_prob
         flag = True
         while flag: 
@@ -265,7 +275,6 @@ class Engine :
         return room_options.tolist()
     
     def __no_more_doors(map : list) :
-        print("AAAAAAAAAAAAAAAAAAAAAAA")
         lost_flag = True
         for i in range(5):
             if i == 2 : 
@@ -289,8 +298,6 @@ class Engine :
                         lost_flag = lost_flag and doors["N"] == "none"
 
                     previous_state = state
-                print(f"{j}, {i}")
-                print(lost_flag)
 
         for i in range(9):
             previous_state = 0 if map[i][0] == None else 1
@@ -310,8 +317,6 @@ class Engine :
                         lost_flag = lost_flag and doors["W"] == "none"
 
                     previous_state = state
-                print(f"{i}, {j}")
-                print(lost_flag)
         
         return lost_flag
 

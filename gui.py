@@ -103,7 +103,8 @@ class GUI :
             if input["ask_Create_room"] : 
                 room_option = input["room_option"]
                 cursor = input["cursor"]
-                self.__update_ask_room(room_option, cursor)
+                cursor_color = input["cursor_color"]
+                self.__update_ask_room(room_option, cursor, cursor_color)
             
 
 
@@ -283,17 +284,24 @@ class GUI :
                 self.screen.blit(text, textRect)
                 i+=1
     
-    def __update_ask_room(self, room_option : list, cursor : int):
+    def __update_ask_room(self, room_option : list, cursor : int, cursor_color : str):
 
         for i, room in enumerate(room_option) : 
             image = pygame.image.load(room.image)
             image = pygame.transform.scale(image, (150, 150))
-            self.screen.blit(image, (463 + (i * 162), 390))
+            self.screen.blit(image, (463 + (i * 162), 400))
 
-        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), 390), (150, HEIGHT)))
-        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), 390), (HEIGHT, 150)))
-        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), 390 + (150 - HEIGHT)), (150, HEIGHT)))
-        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162) + (150 - HEIGHT), 390), (HEIGHT, 150)))
+            font = pygame.font.Font('freesansbold.ttf', 20)
+            text = f"{room.cost} gems"
+            text = font.render(text, True, "white")
+            textRect = text.get_rect()
+            textRect.center = (538 + (i * 162), 590)
+            self.screen.blit(text, textRect)
+        
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400), (150, HEIGHT)))
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400), (HEIGHT, 150)))
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400 + (150 - HEIGHT)), (150, HEIGHT)))
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162) + (150 - HEIGHT), 400), (HEIGHT, 150)))
   
     def quit() : 
         """
