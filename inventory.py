@@ -6,7 +6,7 @@ class Inventory :
         self.steps = 70
         self.coins = 0
         self.gems = 2
-        self.keys = 0
+        self.keys = 2
         self.dices = 0
         self.object_list = Object()
 

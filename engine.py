@@ -23,6 +23,7 @@ class Engine :
                  "ask_Create_room" : False,
                  "cursor" : None,
                  "cursor_color" : "white",
+                 "locked" : None,
                  "room_option" : None,
                  "win" : False,
                  "lose" : False}
@@ -62,9 +63,10 @@ class Engine :
 
             # if we are in the process of creating a room
             if current_input["ask_Create_room"] : 
-
                 new_input = Engine.__askCreateRoom(current_input)
 
+            elif current_input["locked"] != None : 
+                new_input = Engine.__unlock(current_input)
 
             else : 
                 new_input = Engine.__move_player(current_input)
@@ -153,9 +155,9 @@ class Engine :
                 #if the room dosn't exist => ask to create one
                 elif map[new_player_pos[1]][new_player_pos[0]] == None: 
                     
-                    new_input["ask_Create_room"] = True
+                    new_input = Engine.__ask_unlock(current_input)
                     new_input["cursor"] = 0
-                    new_input["room_option"] = Engine.__three_rooms()
+                    
                     
                 new_input["player_orient"] = new_orient   
 
@@ -173,22 +175,31 @@ class Engine :
         new_room = new_room.copy()
         col,row = input["player_pos"]
         map = input["map"].copy()
+        
+        current_room = map[row][col]
+        current_orient = input["player_orient"]
+        current_room.doors[current_orient] = "open"
+
         match input["player_orient"]:
             case "N":
                 new_room.orientation = 0
                 Engine.__spin(new_room.doors,new_room.orientation)
+                new_room = Engine.__lock_doors(input, new_room)
                 map[row-1][col] = new_room
             case "S":
                 new_room.orientation = 180
                 Engine.__spin(new_room.doors,new_room.orientation)
+                new_room = Engine.__lock_doors(input, new_room)
                 map[row+1][col] = new_room
             case "W":
                 new_room.orientation = 90
                 Engine.__spin(new_room.doors,new_room.orientation)
+                new_room = Engine.__lock_doors(input, new_room)
                 map[row][col-1] = new_room
             case "E":
                 new_room.orientation = -90
                 Engine.__spin(new_room.doors,new_room.orientation)
+                new_room = Engine.__lock_doors(input, new_room)
                 map[row][col+1] = new_room
         return map
 
@@ -319,6 +330,104 @@ class Engine :
                     previous_state = state
         
         return lost_flag
+    
+
+    def __ask_unlock(current_input : dict) :
+        pos = current_input["player_pos"]
+        orient = current_input["player_orient"]
+        map = current_input["map"]
+        room = map[pos[1]][pos[0]]
+        door = room.doors[orient]
+        
+        new_input = current_input.copy()
+
+        if door == "locked" : 
+            new_input["locked"] = 1
+            new_input["cursor"] == 0
+            print(1)
+        elif door == "dlocked":
+            new_input["locked"] = 2
+            new_input["cursor"] == 0
+            print(2)
+
+        elif door == "open" : 
+            new_input["cursor"] = 0
+            new_input["ask_Create_room" ] = True
+            new_input["room_option"] = Engine.__three_rooms()
+            
+        
+        return new_input
 
         
+    def __unlock(current_input : dict):
+
+        inventory = current_input["inventory"]
+        new_input = current_input.copy()
+        cursor = current_input["cursor"]
+        cursor_color = current_input["cursor_color"]
+        locked = current_input["locked"]
+        key = current_input["key_pressed"]
+
+        if locked == 1 : 
+            able_to_open = inventory.object_list.rabbit_foot or inventory.keys >= 1
+        else : #locked == 2
+            able_to_open = inventory.keys >= 2
+
+
+        if key == "RIGHT" : 
+            new_input["cursor"] = min(1, cursor + 1)
+        elif key == "LEFT" : 
+            new_input["cursor"] = max(0, cursor - 1)
+
+        elif (key == "SPACE" or key == "RETURN") and cursor_color == "white" : # if the choice is possible
+
+            if cursor == 0 : # no, the player doesn't want to open a room
+                new_input["cursor"] = None
+                new_input["locked"] = None
+                return new_input
+            else : #cursor == 1, the player want and can unlock the door
+                map = new_input["map"]
+                pos = new_input["player_pos"]
+                orient = new_input["player_orient"]
+                map[pos[1]][pos[0]].doors[orient] = "open"
+                new_input["cursor"] = 0
+                new_input["ask_Create_room" ] = True
+                new_input["inventory"].keys -= locked
+                new_input["locked"] = None
+                new_input["room_option"] = Engine.__three_rooms()
+
         
+        if new_input["cursor"] == 1 and not(able_to_open): 
+            new_input["cursor_color"] = "red"
+        else : 
+            new_input["cursor_color"] = "white"
+
+        return new_input
+
+
+
+    def __lock_doors(input : dict, room : Rooms) :
+        map = input["map"]
+        orient = input["player_orient"]
+
+        for i in ["N", "S", "W", "E"] : 
+            if (orient != i) and (room.doors[i] == "open") : 
+                room.doors[i] = Engine.__is_door_locked(map)
+            
+        return room
+
+
+    def __is_door_locked(map : list) : 
+
+        nb_room = 0
+        for i in map : 
+            for j in i : 
+                if j != None : 
+                    nb_room += 1
+        
+        list = ["open", "locked", "dlocked"]
+        proba = [1 -  (3 * nb_room) / 100, (2 * nb_room) / 100, nb_room / 100]
+
+        choix = np.random.choice(a = list, p = proba)
+
+        return str(choix)

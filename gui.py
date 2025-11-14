@@ -93,7 +93,7 @@ class GUI :
 
             player_pos = input["player_pos"]
             
-            self.__update_pos(player_pos, player_orient,map)
+            self.__update_pos(player_pos, player_orient, map)
 
             inventory = input["inventory"]
             self.__update_inventory(inventory)
@@ -105,6 +105,12 @@ class GUI :
                 cursor = input["cursor"]
                 cursor_color = input["cursor_color"]
                 self.__update_ask_room(room_option, cursor, cursor_color)
+
+            elif input["locked"] != None : 
+                cursor = input["cursor"]
+                cursor_color = input["cursor_color"]
+                locked = input["locked"]
+                self.__update_ask_unlock(cursor, cursor_color, locked)
             
 
 
@@ -302,7 +308,38 @@ class GUI :
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400), (HEIGHT, 150)))
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400 + (150 - HEIGHT)), (150, HEIGHT)))
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162) + (150 - HEIGHT), 400), (HEIGHT, 150)))
-  
+    
+    def __update_ask_unlock(self, cursor : int, cursor_color : str, locked : int) : 
+
+        font = pygame.font.Font('freesansbold.ttf', 30)
+        text = "Do you want to open this door ?" 
+        text = font.render(text, True, "white")
+        textRect = text.get_rect()
+        textRect.center = (700, 400)
+        self.screen.blit(text, textRect)
+
+        text = f"It requires {locked} key(s)."
+        text = font.render(text, True, "white")
+        textRect = text.get_rect()
+        textRect.center = (700, 500)
+        self.screen.blit(text, textRect)
+
+        font = pygame.font.Font('freesansbold.ttf', 20)
+        text = font.render("no", True, "white")
+        textRect = text.get_rect()
+        textRect.center = (575, 600)
+        self.screen.blit(text, textRect)
+
+        text = font.render("yes", True, "white")
+        textRect = text.get_rect()
+        textRect.center = (825, 600)
+        self.screen.blit(text, textRect)
+
+    
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((535 + (cursor * 250), 560 + (80 - HEIGHT)), (80, HEIGHT)))
+        
+
+
     def quit() : 
         """
         quit the pygame  window
