@@ -72,7 +72,7 @@ class Engine :
             if new_input["player_pos"] == [2, 0] : 
                 new_input["win"] = True
 
-            if new_input["inventory"].steps == 0 : 
+            if new_input["inventory"].steps == 0  or Engine.__no_more_doors(new_input["map"]): 
                 new_input["lose"] = True
 
         return new_input
@@ -263,6 +263,57 @@ class Engine :
             flag = not(room1.cost == 0 or  room2.cost == 0 or room3.cost == 0)
 
         return room_options.tolist()
+    
+    def __no_more_doors(map : list) :
+        print("AAAAAAAAAAAAAAAAAAAAAAA")
+        lost_flag = True
+        for i in range(5):
+            if i == 2 : 
+                previous_state = 0
+            else : 
+                previous_state = 0 if map[0][i] == None else 1
+
+            for j in range(1, 9) : 
+
+                if (i == 2 and j == 0) :
+                    previous_state = 0
+                else: 
+                    state = 0 if map[j][i] == None else 1
+
+                    if previous_state == 1 and state == 0 : 
+                        doors = map[j-1][i].doors
+                        lost_flag = lost_flag and doors["S"] == "none"
+
+                    elif previous_state == 0 and state == 1 : 
+                        doors = map[j][i].doors
+                        lost_flag = lost_flag and doors["N"] == "none"
+
+                    previous_state = state
+                print(f"{j}, {i}")
+                print(lost_flag)
+
+        for i in range(9):
+            previous_state = 0 if map[i][0] == None else 1
+
+            for j in range(1, 5) : 
+                if (j == 2 and i == 0) : 
+                    previous_state = 0
+                else :
+                    state = 0 if map[i][j] == None else 1
+
+                    if previous_state == 1 and state == 0 : 
+                        doors = map[i][j-1].doors
+                        lost_flag = lost_flag and doors["E"] == "none"
+
+                    elif previous_state == 0 and state == 1 : 
+                        doors = map[i][j].doors
+                        lost_flag = lost_flag and doors["W"] == "none"
+
+                    previous_state = state
+                print(f"{i}, {j}")
+                print(lost_flag)
+        
+        return lost_flag
 
         
         
