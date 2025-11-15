@@ -1,16 +1,19 @@
 from rooms import Rooms
+import numpy as np
 
 class Orange_Room(Rooms):
     def __init__(self, name, image, doors, cost, rarity):
         super().__init__(name, image, doors, cost, rarity)
-    
+
 class Hallway(Orange_Room) : 
     def __init__(self) : 
         super().__init__("Hallway","Rooms & Icons\Orange Rooms\Hallway_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},0, 0)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -20,7 +23,9 @@ class West_Wing_Hall(Orange_Room) :
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -30,7 +35,9 @@ class East_Wing_Hall(Orange_Room) :
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -40,7 +47,9 @@ class Corridor(Orange_Room) :
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             map = new_input["map"]
             pos = new_input["player_pos"]
             doors = map[pos[1]][pos[0]].doors
@@ -56,7 +65,9 @@ class Passageway(Orange_Room) :
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -66,7 +77,9 @@ class Secret_Passage(Orange_Room) :
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -76,7 +89,9 @@ class Foyer(Orange_Room) :
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             map = new_input["map"]
             pos = new_input["player_pos"]
             doors = map[pos[1]][pos[0]].doors
@@ -92,8 +107,10 @@ class Great_Hall(Orange_Room) :
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
-    
+
 orange_rooms = [Hallway(), West_Wing_Hall(), East_Wing_Hall(), Corridor(), Passageway(), Secret_Passage(), Foyer(), Great_Hall()]

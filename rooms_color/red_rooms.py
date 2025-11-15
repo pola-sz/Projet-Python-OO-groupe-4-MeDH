@@ -10,7 +10,9 @@ class Lavatory(Red_Room) :
 
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -23,6 +25,7 @@ class Chapel(Red_Room) :
         inventory = new_input["inventory"]
         inventory.coins = max(0, inventory.coins - 1)
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -35,6 +38,7 @@ class Gymnasium(Red_Room) :
         inventory = new_input["inventory"]
         inventory.steps = max(0, inventory.steps - 2)
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -46,6 +50,7 @@ class Weight_Room(Red_Room) :
         new_input = input.copy()
         if self.initialisation :
             inventory = new_input["inventory"]
+            self.random_item_spawn(inventory)
             inventory.steps = inventory.steps // 2
             self.initialisation = False
         return new_input

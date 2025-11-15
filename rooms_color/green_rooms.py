@@ -1,4 +1,5 @@
 from rooms import Rooms
+import numpy as np
 
 class Green_Room(Rooms):
     def __init__(self, name, image, doors, cost, rarity):
@@ -10,7 +11,9 @@ class Terrace(Green_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
         
@@ -20,7 +23,9 @@ class Patio(Green_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -30,7 +35,9 @@ class Courtyard(Green_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -40,7 +47,9 @@ class Cloister(Green_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -50,7 +59,9 @@ class Veranda(Green_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -60,7 +71,9 @@ class Greenhouse(Green_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -72,6 +85,7 @@ class Morning_Room(Green_Room):
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             inventory.gems += 2
             self.initialisation = False
         return new_input
@@ -82,8 +96,10 @@ class Secret_Garden(Green_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
-    
+
 green_rooms = [Terrace(), Patio(), Courtyard(), Cloister(), Veranda(), Greenhouse(), Morning_Room(), Secret_Garden()]

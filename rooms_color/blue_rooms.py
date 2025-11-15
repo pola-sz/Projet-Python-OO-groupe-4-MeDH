@@ -5,8 +5,6 @@ class Blue_Room(Rooms):
     def __init__(self, name, image, doors, cost, rarity):
         super().__init__(name, image, doors, cost, rarity)
 
-item_options = ['shovel', 'hammer', 'crochet_kit', 'metal_detector', 'rabbit_foot', 'coins', 'gems', 'keys', 'dices']
-food_options = ['apple', 'banana', 'cake', 'sandwich', 'dinner']
     
 """ROOM_EVENT_EFFECTS = {
         # Blue
@@ -22,7 +20,7 @@ class Aquarium(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -35,28 +33,28 @@ class Attic(Blue_Room) :
         inventory = new_input["inventory"]
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
-            picked_item = np.random.choice(item_options,8)
+            picked_item = np.random.choice(Rooms.item_options,8)
             for item in picked_item:
                 match item:
                     case 'shovel':
                         inventory.object_list.shovel = True
-                        item_options.remove('shovel')
+                        Rooms.item_options.remove('shovel')
                     case 'hammer':
                         inventory.object_list.hammer = True
-                        item_options.remove('hammer')
+                        Rooms.item_options.remove('hammer')
                     case 'crochet_kit':
                         inventory.object_list.crochet_kit = True
-                        item_options.remove('crochet_kit')
+                        Rooms.item_options.remove('crochet_kit')
                     case 'metal_detector':
                         inventory.object_list.metal_detector = True
-                        item_options.remove('metal_detector')
+                        Rooms.item_options.remove('metal_detector')
                         inventory.coins_chance += 0.23
                         inventory.keys_chance += 0.07
                     case 'rabbit_foot':
                         inventory.object_list.rabbit_foot = True
-                        item_options.remove('rabbit_foot')
+                        Rooms.item_options.remove('rabbit_foot')
                         inventory.coins_chance += 0.1
                         inventory.keys_chance += 0.1
                         inventory.gems_chance += 0.1
@@ -84,7 +82,7 @@ class Ballroom(Blue_Room) :
         inventory = new_input["inventory"]
         inventory.gems = 2
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -96,7 +94,7 @@ class Boiler_Room(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -108,7 +106,7 @@ class Pantry(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
             food_options = ['apple', 'banana']
             choice = np.random.choice(food_options)
@@ -129,7 +127,7 @@ class Den(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
             inventory.gems += 1
             inventory.dices += 1
@@ -143,7 +141,7 @@ class Trophy_room(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
             inventory.gems += 8
             #inventory.coins += 5
@@ -158,7 +156,7 @@ class The_Foundation(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -170,7 +168,7 @@ class Spare_Room(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -182,7 +180,7 @@ class Rotunda(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -194,7 +192,7 @@ class Parlor(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -206,7 +204,7 @@ class Library(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -218,7 +216,7 @@ class Gallery(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -230,7 +228,7 @@ class Music_Room(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
             inventory.keys += 2
         return new_input
@@ -243,7 +241,7 @@ class Study(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -255,7 +253,7 @@ class Dining_Room(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             chosen_meal = np.random.choice(['cake', 'sandwich', 'dinner'],1)
             match chosen_meal:
                 case 'cake':
@@ -275,7 +273,7 @@ class Locker_Room(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
             inventory.keys += 1
         return new_input
@@ -288,7 +286,7 @@ class Drawing_Room(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -300,7 +298,7 @@ class Freezer(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -312,7 +310,7 @@ class Garage(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
             inventory.keys += 3
         return new_input
@@ -324,28 +322,28 @@ class Closet(Blue_Room) :
     def apply_effects(self, input : dict):
         new_input = input.copy()
         inventory = new_input["inventory"]
-        chosen_item = np.random.choice(item_options,2)
+        chosen_item = np.random.choice(Rooms.item_options,2)
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             for item in chosen_item:
                 match item:
                     case 'shovel':
                         inventory.object_list.shovel = True
-                        item_options.remove('shovel')
+                        Rooms.item_options.remove('shovel')
                     case 'hammer':
                         inventory.object_list.hammer = True
-                        item_options.remove('hammer')
+                        Rooms.item_options.remove('hammer')
                     case 'crochet_kit':
                         inventory.object_list.crochet_kit = True
-                        item_options.remove('crochet_kit')
+                        Rooms.item_options.remove('crochet_kit')
                     case 'metal_detector':
                         inventory.object_list.metal_detector = True
-                        item_options.remove('metal_detector')
+                        Rooms.item_options.remove('metal_detector')
                         inventory.coins_chance += 0.23
                         inventory.keys_chance += 0.07
                     case 'rabbit_foot':
                         inventory.object_list.rabbit_foot = True
-                        item_options.remove('rabbit_foot')
+                        Rooms.item_options.remove('rabbit_foot')
                         inventory.coins_chance += 0.1
                         inventory.keys_chance += 0.1
                         inventory.gems_chance += 0.1
@@ -373,7 +371,7 @@ class Sauna(Blue_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
-            random_item_spawn(inventory)
+            self.random_item_spawn(inventory)
             self.initialisation = False
             inventory.steps += 20
         return new_input
@@ -394,27 +392,7 @@ class Entrance(Blue_Room) :
         new_input = input.copy()
         return new_input
 
-def random_item_spawn(inventory):
-    if np.random.rand() < inventory.coins_chance:
-        inventory.coins += 1
-    if np.random.rand() < inventory.gems_chance:
-        inventory.gems += 1
-    if np.random.rand() < inventory.keys_chance:
-        inventory.keys += 1
-    if np.random.rand() < inventory.dices_chance:
-        inventory.dices += 1
-    if np.random.rand() < inventory.object_list.shovel_chance:
-        inventory.object_list.shovel = True
-        item_options.remove('shovel')
-    if np.random.rand() < inventory.object_list.hammer_chance:
-        inventory.object_list.hammer = True
-        item_options.remove('hammer')
-    if np.random.rand() < inventory.object_list.crochet_kit_chance:
-        inventory.object_list.crochet_kit = True
-        item_options.remove('crochet_kit')
-    if np.random.rand() < inventory.object_list.metal_detector_chance:
-        inventory.object_list.metal_detector = True
-        item_options.remove('metal_detector')
+
 
 start_room = Entrance()
 end_room = Antechamber()

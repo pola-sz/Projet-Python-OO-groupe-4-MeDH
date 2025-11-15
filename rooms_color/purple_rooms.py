@@ -11,6 +11,7 @@ class Bedroom(Purple_Room) :
     def apply_effects(self, input : dict):
         new_input = input.copy()
         inventory = new_input["inventory"]
+        self.random_item_spawn(inventory)
         inventory.steps += 2
         if self.initialisation :
             self.initialisation = False
@@ -22,7 +23,9 @@ class Boudoir(Purple_Room) :
 
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -34,7 +37,9 @@ class Guest_Bedroom(Purple_Room) :
         new_input = input.copy()
         inventory = new_input["inventory"]
         inventory.steps += 2
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -44,7 +49,9 @@ class Bunk_room(Purple_Room) :
 
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             new_input["nb_rooms"] += 1
             self.initialisation = False
         return new_input
@@ -55,7 +62,9 @@ class Master_Bedroom(Purple_Room) :
 
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             nb_rooms = new_input["nb_rooms"]
             inventory = new_input["inventory"]
             inventory.steps += nb_rooms
@@ -70,7 +79,9 @@ class Servants_Quarters(Purple_Room) :
 
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             map = new_input["map"]
 
             nb_bedrooms = 0

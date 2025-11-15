@@ -10,7 +10,9 @@ class Commissary(Yellow_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -20,7 +22,9 @@ class Kitchen(Yellow_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -30,7 +34,9 @@ class Locksmith(Yellow_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -40,7 +46,9 @@ class Showroom(Yellow_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -50,7 +58,9 @@ class Laundry_Room(Yellow_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -60,7 +70,9 @@ class Bookshop(Yellow_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
     
@@ -70,7 +82,9 @@ class The_Armory(Yellow_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
@@ -80,7 +94,9 @@ class Mount_Holly_Gift_Shop(Yellow_Room):
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            self.random_item_spawn(inventory)
             self.initialisation = False
         return new_input
 
