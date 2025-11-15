@@ -16,7 +16,7 @@ class Terrace(Green_Room):
         
 class Patio(Green_Room):
     def __init__(self):
-        super().__init__("Patio", "Rooms & Icons\Green Rooms\Patio_Icon.webp",{"N":"open","S":"open","E":"none","W":"open"}, 1, 1)
+        super().__init__("Patio", "Rooms & Icons\Green Rooms\Patio_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 1, 1)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
