@@ -27,7 +27,8 @@ class Engine :
                  "locked" : None,
                  "room_option" : None,
                  "win" : False,
-                 "lose" : False}
+                 "lose" : False,
+                 "nb_rooms" : 2}
         return input
 
     def initialize_map():
@@ -257,6 +258,7 @@ class Engine :
                 new_input["cursor"] = None
                 new_input["room_option"] = None
                 new_input["cursor_color"] = None
+                new_input["nb_rooms"] += 1
                 new_input["map"] = Engine.__create_room(current_input, room_option[cursor])
                 rooms.remove(room_option[cursor])
 
@@ -418,22 +420,17 @@ class Engine :
 
     def __lock_doors(input : dict, room : Rooms) :
         map = input["map"]
+        nb_rooms = input["nb_rooms"]
         orient = input["player_orient"]
 
         for i in ["N", "S", "W", "E"] : 
             if (orient != i) and (room.doors[i] == "open") : 
-                room.doors[i] = Engine.__is_door_locked(map)
+                room.doors[i] = Engine.__is_door_locked(map, nb_rooms)
             
         return room
 
 
-    def __is_door_locked(map : list) : 
-
-        nb_room = 0
-        for i in map : 
-            for j in i : 
-                if j != None : 
-                    nb_room += 1
+    def __is_door_locked(map : list, nb_room) : 
         
         list = ["open", "locked", "dlocked"]
         proba = [1 -  (3 * nb_room) / 100, (2 * nb_room) / 100, nb_room / 100]
