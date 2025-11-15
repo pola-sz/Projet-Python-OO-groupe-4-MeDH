@@ -1,6 +1,6 @@
 import pygame
 from inventory import Inventory
-from rooms import Rooms, create_room, rooms
+from rooms import Rooms
 
 WIDTH = 80 # Width of a room
 HEIGHT = 8 #Height of the player

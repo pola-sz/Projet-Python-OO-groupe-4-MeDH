@@ -1,5 +1,6 @@
 from inventory import Inventory
-from rooms import Rooms, create_room, rooms
+from rooms import Rooms
+from Pioche import rooms, start_room, end_room
 import numpy as np
 
 class Engine : 
@@ -28,25 +29,10 @@ class Engine :
                  "win" : False,
                  "lose" : False}
         return input
-    
-    ROOM_EVENT_EFFECTS = {
-        # Blue
-        'Pantry': {'coins': 4,'dices': 1},
-        'Den': {'gems': 1,'dices': 1},
-        'Trophy_room': {'gems': 8, 'coins': 5,'dices': 1},
-        'Ballroom': {'gems_set_to': 2},
-        'Music Room': {'keys': 1},
-        'Locker Room': {'keys': 1},
-        'Freezer': {'effects_locked': True},
-        'Garage': {'keys': 3},
-        'Closet': {'items': 2, 'coins': 2},
-        'Sauna': {'steps': 20},
-        'Attic': {'items': 2},
-    }
 
     def initialize_map():
-        start = create_room(start=True)
-        end = create_room(end=True)
+        start = start_room
+        end = end_room
         return [[None, None, end , None, None],
                 [None, None,None , None, None],
                 [None, None,None , None, None],
@@ -166,10 +152,9 @@ class Engine :
                             new_input["player_pos"] = new_player_pos
                             new_input["inventory"] = inventory
                             moved_room = map[new_player_pos[1]][new_player_pos[0]]
-                            Engine.__apply_room_event(moved_room, new_input)
-                    
-                    
-                    
+                            new_input = moved_room.apply_effects(new_input)
+                            
+
                 #if the room dosn't exist => ask to create one
                 elif map[new_player_pos[1]][new_player_pos[0]] == None: 
                     
@@ -190,7 +175,7 @@ class Engine :
         Returns:
             list: new map
         """
-        new_room = new_room.copy()
+        global rooms
         col,row = input["player_pos"]
         map = input["map"].copy()
         
@@ -457,58 +442,3 @@ class Engine :
 
         return str(choix)
     
-    def __apply_room_event(room: Rooms, input: dict):
-        """Apply the defined event for the room instance once per placed instance.
-
-        This mutates the input['inventory'] and input flags (effects_locked, green_costs_zero).
-        """
-        if hasattr(room, '_event_triggered') and room._event_triggered:
-            return
-
-        inv = input.get('inventory')
-        if inv is None:
-            return
-
-        effects = Engine.ROOM_EVENT_EFFECTS.get(room.name)
-        if not effects:
-            room._event_triggered = True
-            return
-
-        # if effects_locked is set in input, skip positive effects
-        locked = input.get('effects_locked', False)
-
-        # helpers
-        def give_items(n):
-            attrs = [k for k in inv.object_list.__dict__.keys()]
-            for _ in range(n):
-                a = np.random.choice(attrs)
-                setattr(inv.object_list, a, True)
-
-        for k, v in effects.items():
-            if k == 'items' and v > 0:
-                give_items(v)
-            elif k == 'gems_set_to':
-                if not locked:
-                    inv.gems = v
-            elif k == 'dices':
-                inv.dices = v
-            elif k == 'steps_divide':
-                # divide steps by v
-                inv.steps = max(0, inv.steps // v)
-            elif k == 'effects_locked' and v:
-                input['effects_locked'] = True
-            elif k == 'green_costs_zero' and v:
-                input['green_costs_zero'] = True
-            else:
-                # numeric change
-                if isinstance(v, int):
-                    if v >= 0:
-                        if not locked:
-                            if hasattr(inv, k):
-                                setattr(inv, k, getattr(inv, k, 0) + v)
-                    else:
-                        # negative change always applies (deduction)
-                        if hasattr(inv, k):
-                            setattr(inv, k, max(0, getattr(inv, k, 0) + v))
-
-        room._event_triggered = True
