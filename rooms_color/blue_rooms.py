@@ -1,9 +1,12 @@
 from rooms import Rooms
+import numpy as np
 
 class Blue_Room(Rooms):
     def __init__(self, name, image, doors, cost, rarity):
         super().__init__(name, image, doors, cost, rarity)
 
+item_options = ['shovel', 'hammer', 'crochet_kit', 'metal_detector', 'rabbit_foot', 'coins', 'gems', 'keys', 'dices']
+food_options = ['apple', 'banana', 'cake', 'sandwich', 'dinner']
     
 """ROOM_EVENT_EFFECTS = {
         # Blue
@@ -23,12 +26,34 @@ class Aquarium(Blue_Room) :
 
 class Attic(Blue_Room) : 
     def __init__(self) : 
-        super().__init__("Attic","Rooms & Icons\Blue Rooms\Attic_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},0, 3)
+        super().__init__("Attic","Rooms & Icons\Blue Rooms\Attic_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},3 , 3)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
             self.initialisation = False
+            picked_item = np.random.choice(item_options,8)
+            for item in picked_item:
+                match item:
+                    case 'shovel':
+                        inventory.object_list.shovel = True
+                    case 'hammer':
+                        inventory.object_list.hammer = True
+                    case 'crochet_kit':
+                        inventory.object_list.crochet_kit = True
+                    case 'metal_detector':
+                        inventory.object_list.metal_detector = True
+                    case 'rabbit_foot':
+                        inventory.object_list.rabbit_foot = True
+                    case 'coins':
+                        inventory.coins += 1
+                    case 'gems':
+                        inventory.gems += 1
+                    case 'keys':
+                        inventory.keys += 1
+                    case 'dices':
+                        inventory.dices += 1
         return new_input
     
 class Ballroom(Blue_Room) : 
@@ -62,6 +87,13 @@ class Pantry(Blue_Room) :
         inventory = new_input["inventory"]
         if self.initialisation :
             self.initialisation = False
+            food_options = ['apple', 'banana']
+            choice = np.random.choice(food_options)
+            match choice:
+                case 'apple':
+                    inventory.object_list.apple += 1
+                case 'banana':
+                    inventory.object_list.banana += 1
             inventory.coins += 4
             inventory.dices += 1
         return new_input
@@ -81,7 +113,7 @@ class Den(Blue_Room) :
     
 class Trophy_room(Blue_Room) : 
     def __init__(self) : 
-        super().__init__("Trophy room", "Rooms & Icons\Blue Rooms\Trophy_Room_Icon.webp", {"N":"none","S":"open","E":"none","W":"open"},0, 3)
+        super().__init__("Trophy room", "Rooms & Icons\Blue Rooms\Trophy_Room_Icon.webp", {"N":"none","S":"open","E":"none","W":"open"},5, 3)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -89,7 +121,7 @@ class Trophy_room(Blue_Room) :
         if self.initialisation :
             self.initialisation = False
             inventory.gems += 8
-            inventory.coins += 5
+            #inventory.coins += 5
             inventory.dices += 1
         return new_input
     
@@ -133,16 +165,6 @@ class Parlor(Blue_Room) :
             self.initialisation = False
         return new_input
 
-class Ballroom(Blue_Room) : 
-    def __init__(self) : 
-        super().__init__("Ballroom","Rooms & Icons\Blue Rooms\Ballroom_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},0, 2)
-
-    def apply_effects(self, input : dict):
-        new_input = input.copy()
-        if self.initialisation :
-            self.initialisation = False
-        return new_input
-
 class Library(Blue_Room) : 
     def __init__(self) : 
         super().__init__("Library","Rooms & Icons\Blue Rooms\Library_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"},0, 2)
@@ -165,14 +187,14 @@ class Gallery(Blue_Room) :
     
 class Music_Room(Blue_Room) : 
     def __init__(self) : 
-        super().__init__("Music Room","Rooms & Icons\Blue Rooms\Music_Room_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"},0, 2)
+        super().__init__("Music Room","Rooms & Icons\Blue Rooms\Music_Room_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"},2, 2)
 
     def apply_effects(self, input : dict):
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
             self.initialisation = False
-            inventory.keys += 1
+            inventory.keys += 2
         return new_input
     
 class Study(Blue_Room) : 
@@ -191,13 +213,22 @@ class Dining_Room(Blue_Room) :
 
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
         if self.initialisation :
+            chosen_meal = np.random.choice(['cake', 'sandwich', 'dinner'],1)
+            match chosen_meal:
+                case 'cake':
+                    inventory.object_list.cake += 1
+                case 'sandwich':
+                    inventory.object_list.sandwich += 1
+                case 'dinner':
+                    inventory.object_list.dinner += 1
             self.initialisation = False
         return new_input
 
 class Locker_Room(Blue_Room) : 
     def __init__(self) : 
-        super().__init__("Locker Room","Rooms & Icons\Blue Rooms\Locker_Room_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},0, 3)
+        super().__init__("Locker Room","Rooms & Icons\Blue Rooms\Locker_Room_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},1, 3)
 
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -211,16 +242,6 @@ class Drawing_Room(Blue_Room) :
     def __init__(self) : 
         super().__init__("Dining Room","Rooms & Icons\Blue Rooms\Dining_Room_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},0, 1)
         
-    def apply_effects(self, input : dict):
-        new_input = input.copy()
-        if self.initialisation :
-            self.initialisation = False
-        return new_input
-    
-class Drawing_Room(Blue_Room) : 
-    def __init__(self) : 
-        super().__init__("Drawing Room","Rooms & Icons\Blue Rooms\Drawing_Room_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},0, 0)
-
     def apply_effects(self, input : dict):
         new_input = input.copy()
         if self.initialisation :
@@ -255,7 +276,29 @@ class Closet(Blue_Room) :
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
+        inventory = new_input["inventory"]
+        chosen_item = np.random.choice(item_options,2)
         if self.initialisation :
+            for item in chosen_item:
+                match item:
+                    case 'shovel':
+                        inventory.object_list.shovel = True
+                    case 'hammer':
+                        inventory.object_list.hammer = True
+                    case 'crochet_kit':
+                        inventory.object_list.crochet_kit = True
+                    case 'metal_detector':
+                        inventory.object_list.metal_detector = True
+                    case 'rabbit_foot':
+                        inventory.object_list.rabbit_foot = True
+                    case 'coins':
+                        inventory.coins += 1
+                    case 'gems':
+                        inventory.gems += 1
+                    case 'keys':
+                        inventory.keys += 1
+                    case 'dices':
+                        inventory.dices += 1
             self.initialisation = False
         return new_input
 
