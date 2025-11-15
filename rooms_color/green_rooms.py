@@ -34,9 +34,9 @@ class Courtyard(Green_Room):
             self.initialisation = False
         return new_input
     
-class Coister(Green_Room):
+class Cloister(Green_Room):
     def __init__(self):
-        super().__init__("Coister", "Rooms & Icons\Green Rooms\Coister_Icon.webp",{"N":"open","S":"open","E":"open","W":"open"}, 3, 2)
+        super().__init__("Cloister", "Rooms & Icons\Green Rooms\Cloister_Icon.webp",{"N":"open","S":"open","E":"open","W":"open"}, 3, 2)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -86,4 +86,4 @@ class Secret_Garden(Green_Room):
             self.initialisation = False
         return new_input
     
-green_rooms = [Terrace(), Patio(), Courtyard(), Coister(), Veranda(), Greenhouse(), Morning_Room(), Secret_Garden()]
+green_rooms = [Terrace(), Patio(), Courtyard(), Cloister(), Veranda(), Greenhouse(), Morning_Room(), Secret_Garden()]
