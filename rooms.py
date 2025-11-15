@@ -138,7 +138,7 @@ start_end_room = [Blue_Room("entrance", "Rooms & Icons\Blue Rooms\Entrance_Hall_
                   Blue_Room("antechamber", "Rooms & Icons\Blue Rooms\Antechamber_Icon.webp", {"N":"open","S":"open","E":"open","W":"open"}, 0, 0)
 
 ]
-rooms = [
+""" rooms = [
     Blue_Room("Pantry", "Rooms & Icons\Blue Rooms\Pantry_Icon.webp", {"N":"none","S":"open","E":"none","W":"open"}, 0, 0),
     Blue_Room("Den", "Rooms & Icons\Blue Rooms\Den_Icon.webp", {"N":"none","S":"open","E":"open","W":"open"}, 0, 0),
     Blue_Room("Trophy_room", "Rooms & Icons\Blue Rooms\Trophy_Room_Icon.webp", {"N":"none","S":"open","E":"none","W":"open"},3, 3),
@@ -162,19 +162,50 @@ rooms = [
     Blue_Room("Sauna","Rooms & Icons\Blue Rooms\Sauna_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},2, 2),
     Blue_Room("Attic","Rooms & Icons\Blue Rooms\Attic_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},3, 3),
     Blue_Room("Boiler Room","Rooms & Icons\Blue Rooms\Boiler_Room_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},1, 2)
+] """
+
+
+blue_rooms = [
+    ("Aquarium","Rooms & Icons\Blue Rooms\Aquarium_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},1, 2),
+    ("Attic","Rooms & Icons\Blue Rooms\Attic_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},0, 3),
+    ("Ballroom","Rooms & Icons\Blue Rooms\Ballroom_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},2, 2),
+    ("Boiler Room","Rooms & Icons\Blue Rooms\Boiler_Room_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},1, 2),
+    ("Pantry", "Rooms & Icons\Blue Rooms\Pantry_Icon.webp", {"N":"none","S":"open","E":"none","W":"open"}, 0, 0),
+    ("Den", "Rooms & Icons\Blue Rooms\Den_Icon.webp", {"N":"none","S":"open","E":"open","W":"open"}, 0, 0),
+    ("Trophy_room", "Rooms & Icons\Blue Rooms\Trophy_Room_Icon.webp", {"N":"none","S":"open","E":"none","W":"open"},0, 3),
+    
+    ("The Foundation","Rooms & Icons\Blue Rooms\The_Foundation_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},0, 3),
+    ("Spare Room","Rooms & Icons\Blue Rooms\Spare_Room_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},0, 0),
+    ("Rotunda","Rooms & Icons\Blue Rooms\Rotunda_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"},0, 3),
+    ("Parlor","Rooms & Icons\Blue Rooms\Parlor_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"},0, 0),
+    ("Ballroom","Rooms & Icons\Blue Rooms\Ballroom_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},0, 2),
+    ("Library","Rooms & Icons\Blue Rooms\Library_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"},0, 2),
+    
+    ("Gallery","Rooms & Icons\Blue Rooms\Gallery_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},0, 3),
+    ("Music Room","Rooms & Icons\Blue Rooms\Music_Room_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"},0, 2),
+    ("Study","Rooms & Icons\Blue Rooms\Study_Icon.webp",{"N":"none","S":"open","E":"open","W":"none"},0, 2),
+    ("Dining Room","Rooms & Icons\Blue Rooms\Dining_Room_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},0, 1),
+    ("Locker Room","Rooms & Icons\Blue Rooms\Locker_Room_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},0, 3),
+    ("Drawing Room","Rooms & Icons\Blue Rooms\Drawing_Room_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},0, 0),
+    ("Freezer","Rooms & Icons\Blue Rooms\Freezer_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},0, 3),
+    ("Garage","Rooms & Icons\Blue Rooms\Garage_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},0, 2),
+    ("Closet","Rooms & Icons\Blue Rooms\Closet_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},0, 0),
+    ("Sauna","Rooms & Icons\Blue Rooms\Sauna_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},0, 2)
 ]
 
 
+def pioche():
+    rooms = []
+    count = []
+    for _ in range(len(blue_rooms)):
+        count.append(0)
 
+    while (len(rooms)) < 45:
+        idx = random.randint(0, len(blue_rooms) - 1)
+        if count[idx] < 2:
+            rooms.append(Blue_Room(*blue_rooms[idx]))
+            count[idx] += 1
+    
+    return rooms
 
-"""
-All_Green_Rooms = {
-    "cloister": Green_Room(2,{"N":"open","S":"open","E":"open","W":"open"}),
-    "courtyard": Green_Room(1,{"N":"none","S":"open","E":"open","W":"open"}),
-    "greenhouse": Green_Room(1,{"N":"none","S":"open","E":"none","W":"none"}),
-    "morning room": Green_Room(3,{"N":"none","S":"open","E":"none","W":"open"}),
-    "patio": Green_Room(1,{"N":"none","S":"open","E":"none","W":"open"}),
-    "secret garden": Green_Room(3,{"N":"none","S":"open","E":"open","W":"open"}),
-    "terrace": Green_Room(1,{"N":"none","S":"open","E":"none","W":"none"}),
-    "veranda": Green_Room(2,{"N":"open","S":"open","E":"none","W":"none"})
-}"""
+rooms = pioche()

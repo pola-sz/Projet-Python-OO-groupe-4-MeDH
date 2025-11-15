@@ -234,13 +234,26 @@ class GUI :
             inventory (Inventory)
         """
         #print the white rectangle
-        pygame.draw.rect(self.screen, "white", pygame.Rect((450,50), (500, 285)))
-
-
+        light_grey = (100, 100, 100)
+        pygame.draw.rect(self.screen, light_grey, pygame.Rect((450,50), (500, 285)))
+        icons = {
+            "steps": pygame.image.load("Rooms & Icons\icons\Steps.webp"),
+            "coins": pygame.image.load("Rooms & Icons\icons\Gold.webp"),
+            "gems": pygame.image.load("Rooms & Icons\icons\Gem.webp"),
+            "keys": pygame.image.load("Rooms & Icons\icons\Key.webp"),
+            "dices": pygame.image.load("Rooms & Icons\icons\Ivory_Dice.webp")
+        }
+        numbers = {
+            "steps": inventory.steps,
+            "coins": inventory.coins,
+            "gems": inventory.gems,
+            "keys": inventory.keys,
+            "dices": inventory.dices
+        }
         names = ("steps", "coins", "gems", "keys", "dices")
-        numbers = (inventory.steps, inventory.coins, inventory.gems, inventory.keys, inventory.dices)
-
-        for i in range(5) : 
+        #numbers = (inventory.steps, inventory.coins, inventory.gems, inventory.keys, inventory.dices)
+        icon_size = (32, 32)
+        """ for i in range(5) : 
             
             to_print = str(numbers[i]) + " " + names[i]
             font = pygame.font.Font('freesansbold.ttf', 20)
@@ -249,7 +262,20 @@ class GUI :
             cX = 575 + (i % 3) * 125
             cY = 100 + (i // 3) * 40
             textRect.center = (cX, cY )
-            self.screen.blit(text, textRect)
+            self.screen.blit(text, textRect) """
+        for i, name in enumerate(icons.keys()):
+            # Icon
+            icon = pygame.transform.scale(icons[name], icon_size)
+            cX = 500 + (i % 3) * 125
+            cY = 80 + (i // 3) * 50
+            self.screen.blit(icon, (cX, cY))
+
+            # Number next to the icon
+            font = pygame.font.Font('freesansbold.ttf', 20)
+            number_text = font.render(str(numbers[name]), True, "black")
+            text_rect = number_text.get_rect()
+            text_rect.midleft = (cX + icon_size[0] + 5, cY + icon_size[1] // 2)
+            self.screen.blit(number_text, text_rect)
 
         #print objects
 
