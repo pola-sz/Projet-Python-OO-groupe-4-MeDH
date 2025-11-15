@@ -1,6 +1,6 @@
 import pygame
 from inventory import Inventory
-from rooms import Rooms
+from rooms import Rooms, create_room, rooms
 
 WIDTH = 80 # Width of a room
 HEIGHT = 8 #Height of the player
@@ -59,6 +59,21 @@ class GUI :
                         
                     elif event.key == pygame.K_RIGHT:
                         input["key_pressed"] = "RIGHT"
+                    
+                    elif event.key == pygame.K_p:
+                        input["key_pressed"] = "P"
+
+                    elif event.key == pygame.K_m:
+                        input["key_pressed"] = "M"
+
+                    elif event.key == pygame.K_o:
+                        input["key_pressed"] = "O"
+
+                    elif event.key == pygame.K_l:
+                        input["key_pressed"] = "L"
+
+                    elif event.key == pygame.K_k:
+                        input["key_pressed"] = "K"
 
             
         else : 
@@ -87,6 +102,8 @@ class GUI :
             self.screen.fill("blue")
             pygame.draw.rect(self.screen, "black", pygame.Rect((0, 0), (400, 720)))
 
+            
+
             player_orient = input["player_orient"]
             map = input["map"]
             self.__update_map(map)
@@ -99,22 +116,38 @@ class GUI :
             self.__update_inventory(inventory)
 
             pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285)))
+            font = pygame.font.Font('freesansbold.ttf', 20)
+            text1 = font.render("P : To eat Apple", True, "white")
+            text2 = font.render("M : To eat Banana", True, "white")
+            text3 = font.render("O : To eat Cake", True, "white")
+            text4 = font.render("L : To eat Sandwich", True, "white")
+            text5 = font.render("K : To eat Dinner", True, "white")
+            food_exist = input["inventory"].object_list
+            if food_exist.apple > 0:
+                self.screen.blit(text1, (460, 395))
+            if food_exist.banana > 0:
+                self.screen.blit(text2, (460, 420))
+            if food_exist.cake > 0:
+                self.screen.blit(text3, (460, 445))
+            if food_exist.sandwich > 0:
+                self.screen.blit(text4, (460, 470))
+            if food_exist.dinner > 0:
+                self.screen.blit(text5, (460, 495))
 
             if input["ask_Create_room"] : 
+                pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285)))
                 room_option = input["room_option"]
                 cursor = input["cursor"]
                 cursor_color = input["cursor_color"]
-                self.__update_ask_room(room_option, cursor, cursor_color)
+                dice = input["inventory"].dices
+                self.__update_ask_room(room_option, cursor, cursor_color,dice)
 
             elif input["locked"] != None : 
                 cursor = input["cursor"]
                 cursor_color = input["cursor_color"]
                 locked = input["locked"]
                 self.__update_ask_unlock(cursor, cursor_color, locked)
-            
-
-
-
+        
         pygame.display.flip()
 
     def __update_pos(self, player_pos : list, player_orient : str, map : list[Rooms]) : 
@@ -307,7 +340,15 @@ class GUI :
         for key, value in inventory.object_list.__dict__.items(): 
             if value == True:
                 font = pygame.font.Font('freesansbold.ttf', 20)
-                text = font.render(str(key), True, "black")
+                if key == "crochet_kit":
+                    display_key = "crochet kit"
+                elif key == "metal_detector":
+                    display_key = "metal detector"
+                elif key == "rabbit_foot":
+                    display_key = "rabbit foot"
+                else:
+                    display_key = key
+                text = font.render(str(display_key), True, "black")
                 textRect = text.get_rect()
                 cX = 575 + (i % 3) * 150
                 cY = 200 + (i // 3) * 40
@@ -316,7 +357,7 @@ class GUI :
                 self.screen.blit(text, textRect)
                 i+=1
     
-    def __update_ask_room(self, room_option : list, cursor : int, cursor_color : str):
+    def __update_ask_room(self, room_option : list, cursor : int, cursor_color : str, dice :int):
 
         for i, room in enumerate(room_option) : 
             image = pygame.image.load(room.image)
@@ -329,6 +370,9 @@ class GUI :
             textRect = text.get_rect()
             textRect.center = (538 + (i * 162), 590)
             self.screen.blit(text, textRect)
+        if dice > 0:
+            text_re = font.render("ESC : To Reroll", True, "white")
+            self.screen.blit(text_re, (640, 620))
         
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400), (150, HEIGHT)))
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400), (HEIGHT, 150)))
