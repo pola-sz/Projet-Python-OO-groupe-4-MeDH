@@ -25,10 +25,84 @@ class Engine :
                  "ask_Create_room" : False,
                  "cursor" : None,
                  "room_option" : None,
+                 "ask_unlock" : False,
+                 "locked_dir" : None,
+                 "locked_pos" : None,
+                 "unlock_cursor" : 0,
+                 "unlock_cursor_color" : "white",
                  "win" : False,
                  "lose" : False,
                  "blocked_rooms" : []}
         return input
+
+    def __no_more_doors(map_obj: list, inventory: Inventory) -> bool:
+        """Check if no more doors are available (adapted from example_engine.py logic).
+        Treats 'locked' doors as available if the player's inventory contains any
+        means to unlock (keys, lockpick, rabbit_foot). Returns True if there are
+        no more available placements.
+        """
+        # helper: does the player have any tool to unlock doors?
+        def _can_unlock(inv: Inventory) -> bool:
+            if inv is None:
+                return False
+            if getattr(inv, 'keys', 0) > 0:
+                return True
+            ol = getattr(inv, 'object_list', None)
+            if ol is None:
+                return False
+            return bool(getattr(ol, 'lockpick', False) or getattr(ol, 'rabbit_foot', False))
+
+        def _is_blocking(door_state: str, can_unlock: bool) -> bool:
+            # door_state blocks placement when it's "none", or when it's
+            # "locked" but the player cannot unlock it.
+            if door_state == 'none':
+                return True
+            if door_state == 'locked' and not can_unlock:
+                return True
+            return False
+
+        can_unlock_tools = _can_unlock(inventory)
+        lost_flag = True
+        # check vertical adjacencies (columns)
+        for i in range(5):
+            if i == 2:
+                previous_state = 0
+            else:
+                previous_state = 0 if map_obj[0][i] is None else 1
+
+            for j in range(1, 9):
+                if i == 2 and j == 0:
+                    previous_state = 0
+                else:
+                    state = 0 if map_obj[j][i] is None else 1
+
+                    if previous_state == 1 and state == 0:
+                        doors = map_obj[j-1][i].doors
+                        lost_flag = lost_flag and _is_blocking(doors["S"], can_unlock_tools)
+                    elif previous_state == 0 and state == 1:
+                        doors = map_obj[j][i].doors
+                        lost_flag = lost_flag and _is_blocking(doors["N"], can_unlock_tools)
+
+                    previous_state = state
+        # check horizontal adjacencies (rows)
+        for i in range(9):
+            previous_state = 0 if map_obj[i][0] is None else 1
+
+            for j in range(1, 5):
+                if j == 2 and i == 0:
+                    previous_state = 0
+                else:
+                    state = 0 if map_obj[i][j] is None else 1
+
+                    if previous_state == 1 and state == 0:
+                        doors = map_obj[i][j-1].doors
+                        lost_flag = lost_flag and _is_blocking(doors["E"], can_unlock_tools)
+                    elif previous_state == 0 and state == 1:
+                        doors = map_obj[i][j].doors
+                        lost_flag = lost_flag and _is_blocking(doors["W"], can_unlock_tools)
+
+                    previous_state = state
+        return lost_flag
 
     def __can_create_room(room: Rooms, inventory: Inventory) -> bool:
         """Check if a room can be created given the current inventory.
@@ -63,11 +137,11 @@ class Engine :
         'Freezer': {'effects_locked': True},
         'Garage': {'keys': 3},
         'Closet': {'items': 2, 'coins': 2},
-        'Sauna': {'steps': 20},
+        'Sauna': {'steps': 21},
         'Attic': {'items': 2},
         # Green
         'Morning Room': {'gems': 2},
-        'Patio': {'gems': 4},
+        'Patio': {'gems': 5},
         'Secret Garden': {'steps': 8, 'coins': 1},
         'Terrace': {'green_costs_zero': True},
         'Veranda': {'items': 1},
@@ -75,10 +149,10 @@ class Engine :
         'Great Hall': {'keys': -4},
         # Purple
         'Bedroom': {'steps': 10, 'coins': 2},
-        'Bunk Room': {'steps': 20, 'coins': 4},
-        'Guest Bedroom': {'steps': 10},
-        "Her Ladyship's Chamber": {'steps': 10, 'gems': 3, 'coins': 2},
-        'Master Bedroom': {'steps': 10},
+        'Bunk Room': {'steps': 21, 'coins': 4},
+        'Guest Bedroom': {'steps': 11},
+        "Her Ladyship's Chamber": {'steps': 11, 'gems': 3, 'coins': 2},
+        'Master Bedroom': {'steps': 11},
         'Nursery': {'steps': 5, 'coins': -2},
         "Servant's Quarters": {'keys': 2},
         # Red
@@ -93,8 +167,8 @@ class Engine :
 
     # Requirements to create a room: resources that must be >= amount to allow placement
     ROOM_CREATION_REQUIREMENTS = {
-        'Great Hall': {'keys': 4},
-        'Archives': {'keys': 4},
+        #'Great Hall': {'keys': 4},
+        #'Archives': {'keys': 4},
         'Chapel': {'coins': 5},
         'Laundry Room': {'coins': 5},
         'Gymnasium': {'steps': 10},
@@ -129,7 +203,7 @@ class Engine :
 
         # Tie ESC to dices: if ESC pressed consume one dice; if none left, ignore ESC
         key = current_input.get("key_pressed")
-        if key == "ESCAPE":
+        if key == "ESCAPE" and current_input["ask_Create_room"] == True:
             inv = current_input.get("inventory")
             if inv and getattr(inv, 'dices', 0) > 0:
                 inv.dices -= 1
@@ -158,6 +232,8 @@ class Engine :
                 if len(blocked_rooms) == 3 and new_input["inventory"].dices == 0:
                     new_input["lose"] = True
 
+            elif current_input.get("ask_unlock"):
+                new_input = Engine.__ask_unlock(current_input)
             else : 
                 new_input = Engine.__move_player(current_input)
 
@@ -166,6 +242,10 @@ class Engine :
                 new_input["win"] = True
 
             if new_input["inventory"].steps == 0 : 
+                new_input["lose"] = True
+
+            # if there are no more available adjacent empty tiles reachable via doors -> lose
+            if Engine.__no_more_doors(new_input.get("map", []), new_input.get('inventory')):
                 new_input["lose"] = True
 
         return new_input
@@ -226,7 +306,14 @@ class Engine :
             
 
             if (0 <= new_player_pos[0]) and (new_player_pos[0] <= 4) and (0 <= new_player_pos[1]) and (new_player_pos[1] <= 8) : 
-                
+
+                # If the player only changed orientation (no movement), just update orientation.
+                # This avoids prompting to unlock doors that belong to the same room when the
+                # player is merely rotating in-place.
+                if new_player_pos == player_pos:
+                    new_input["player_orient"] = new_orient
+                    return new_input
+
                 # if the room exists and there are steps
                 if map[new_player_pos[1]][new_player_pos[0]] != None and (inventory.steps != 0): 
                     
@@ -235,6 +322,15 @@ class Engine :
                     next_door = map[new_player_pos[1]][new_player_pos[0]].doors[opposite[player_orient]]
 
                     if ( current_door != "none")  and (next_door != "none"):
+                        # if any side is locked, prompt for unlock instead of moving
+                        if current_door == "locked" or next_door == "locked":
+                            new_input["ask_unlock"] = True
+                            new_input["locked_dir"] = player_orient
+                            new_input["locked_pos"] = player_pos.copy()
+                            new_input["unlock_cursor"] = 0
+                            new_input["unlock_cursor_color"] = "white"
+                            return new_input
+
                         if new_player_pos != player_pos : 
                             inventory.steps -= 1
                             new_input["player_pos"] = new_player_pos
@@ -246,9 +342,18 @@ class Engine :
                     
                     
                     
-                #if the room dosn't exist => ask to create one
-                elif map[new_player_pos[1]][new_player_pos[0]] == None: 
-                    
+                # if the room doesn't exist => ask to create one
+                elif map[new_player_pos[1]][new_player_pos[0]] == None:
+                    current_door_state = map[player_pos[1]][player_pos[0]].doors.get(player_orient)
+                    # if current door is locked, prompt unlock first
+                    if current_door_state == "locked":
+                        new_input["ask_unlock"] = True
+                        new_input["locked_dir"] = player_orient
+                        new_input["locked_pos"] = player_pos.copy()
+                        new_input["unlock_cursor"] = 0
+                        new_input["unlock_cursor_color"] = "white"
+                        return new_input
+
                     new_input["ask_Create_room"] = True
                     new_input["cursor"] = 0
                     new_input["room_option"] = Engine.__three_rooms()
@@ -291,6 +396,22 @@ class Engine :
                     break
             if not ok:
                 # not enough resources -> do not place the room
+                return map
+
+        # Check and deduct gems for room.cost (unless green_costs_zero for Green_Room)
+        green_costs_zero = input.get('green_costs_zero', False)
+        try:
+            from rooms import Green_Room
+        except ImportError:
+            Green_Room = None
+        is_green = Green_Room and isinstance(new_room, Green_Room)
+        if inv is not None and new_room.cost > 0:
+            if is_green and green_costs_zero:
+                pass  # No gem deduction for Green_Rooms if green_costs_zero
+            elif inv.gems >= new_room.cost:
+                inv.gems -= new_room.cost
+            else:
+                # Not enough gems to pay cost
                 return map
 
         match input["player_orient"]:
@@ -437,6 +558,7 @@ class Engine :
 
         # if effects_locked is set in input, skip positive effects
         locked = input.get('effects_locked', False)
+        green_costs_zero = input.get('green_costs_zero', False)
 
         # helpers
         def give_items(n):
@@ -444,6 +566,12 @@ class Engine :
             for _ in range(n):
                 a = random.choice(attrs)
                 setattr(inv.object_list, a, True)
+
+        # Only import Green_Room for isinstance check if needed
+        try:
+            from rooms import Green_Room
+        except ImportError:
+            Green_Room = None
 
         for k, v in effects.items():
             if k == 'items' and v > 0:
@@ -461,16 +589,132 @@ class Engine :
             else:
                 # numeric change
                 if isinstance(v, int):
+                    # Only prevent gem decrease in Green_Rooms if green_costs_zero is set
                     if v >= 0:
                         if not locked:
                             if hasattr(inv, k):
                                 setattr(inv, k, getattr(inv, k, 0) + v)
                     else:
+                        # If this is a Green_Room, green_costs_zero is set, and this is a gem decrease, skip
+                        if k == 'gems' and v < 0 and green_costs_zero and Green_Room and isinstance(room, Green_Room):
+                            continue
                         # negative change always applies (deduction)
                         if hasattr(inv, k):
                             setattr(inv, k, max(0, getattr(inv, k, 0) + v))
 
         room._event_triggered = True
+
+    def __ask_unlock(current_input: dict):
+        """Handle the input state when the player is being asked whether to unlock a door."""
+        key = current_input.get("key_pressed")
+        new_input = current_input.copy()
+        cursor = new_input.get("unlock_cursor", 0)
+        cursor_color = new_input.get("unlock_cursor_color", "white")
+
+        # allow cancelling the unlock prompt by pressing a different movement key
+        key_dir_map = {"UP": "N", "DOWN": "S", "LEFT": "W", "RIGHT": "E"}
+        if key in key_dir_map:
+            target_dir = key_dir_map[key]
+            locked_dir = new_input.get("locked_dir")
+            # if player pressed a different direction, cancel unlock and propagate the key
+            if locked_dir is None or target_dir != locked_dir:
+                new_input["ask_unlock"] = False
+                new_input["locked_dir"] = None
+                new_input["locked_pos"] = None
+                # set the key_pressed so movement/orientation will be processed next frame
+                new_input["key_pressed"] = key
+                # also update player_orient so GUI indicator updates immediately
+                new_input["player_orient"] = target_dir
+                return new_input
+
+        if key == "RIGHT":
+            cursor = (cursor + 1) % 2
+        elif key == "LEFT":
+            cursor = (cursor - 1) % 2
+        elif key in ("RETURN", "SPACE"):
+            # confirm unlock if cursor on Yes (we'll use 1 = Yes)
+            if cursor == 1:
+                # perform unlock
+                Engine.__unlock(new_input)
+            else:
+                # cancel
+                new_input["ask_unlock"] = False
+                new_input["locked_dir"] = None
+                new_input["locked_pos"] = None
+        elif key == "ESCAPE":
+            new_input["ask_unlock"] = False
+            new_input["locked_dir"] = None
+            new_input["locked_pos"] = None
+
+        new_input["unlock_cursor"] = cursor
+        new_input["unlock_cursor_color"] = cursor_color
+        return new_input
+
+    def __unlock(input_data: dict):
+        """Attempt to unlock the door referenced in input_data['locked_pos'] and 'locked_dir'.
+
+        Preference order: lockpick, rabbit_foot, then keys.
+        Using a special item has a 30% chance to consume it.
+        """
+        pos = input_data.get("locked_pos")
+        dir = input_data.get("locked_dir")
+        if pos is None or dir is None:
+            input_data["ask_unlock"] = False
+            return
+
+        x, y = pos
+        map_obj = input_data.get("map")
+        inv = input_data.get("inventory")
+
+        if map_obj is None or inv is None:
+            input_data["ask_unlock"] = False
+            return
+
+        # helper to actually open the door(s)
+        def open_door_at(cx, cy, d):
+            room = map_obj[cy][cx]
+            if room is None:
+                return
+            room.doors[d] = "open"
+            # open opposite side if room exists
+            opp = {"N": "S", "S": "N", "E": "W", "W": "E"}[d]
+            nx, ny = cx + (1 if d == "E" else -1 if d == "W" else 0), cy + (1 if d == "S" else -1 if d == "N" else 0)
+            if 0 <= nx < len(map_obj[0]) and 0 <= ny < len(map_obj):
+                other = map_obj[ny][nx]
+                if other is not None:
+                    other.doors[opp] = "open"
+
+        # Try items first
+        used_item = None
+        for item_name in ("lockpick", "rabbit_foot"):
+            if getattr(inv.object_list, item_name, False):
+                used_item = item_name
+                break
+
+        if used_item:
+            # 30% chance to lose the item
+            if random.random() < 0.3:
+                setattr(inv.object_list, used_item, False)
+            # unlock
+            open_door_at(x, y, dir)
+        elif getattr(inv, "keys", 0) > 0:
+            inv.keys = max(0, inv.keys - 1)
+            open_door_at(x, y, dir)
+        else:
+            # nothing to use -> just cancel
+            input_data["ask_unlock"] = False
+            input_data["locked_dir"] = None
+            input_data["locked_pos"] = None
+            input_data["key_pressed"] = None
+            return
+
+        # successful unlock: clear ask flag so next press will proceed
+        input_data["ask_unlock"] = False
+        input_data["locked_dir"] = None
+        input_data["locked_pos"] = None
+        input_data["key_pressed"] = None  # consume the key so we don't re-process it
+        # updated inventory back into input
+        input_data["inventory"] = inv
 
     def __askCreateRoom(current_input : dict) :
         cursor = current_input["cursor"]

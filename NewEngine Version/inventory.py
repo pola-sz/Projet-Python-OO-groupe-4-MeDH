@@ -9,7 +9,3 @@ class Inventory :
         self.keys = 0
         self.dices = 5
         self.object_list = Object()
-
-
-
-

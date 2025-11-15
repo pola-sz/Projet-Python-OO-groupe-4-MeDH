@@ -46,8 +46,10 @@ class GUI :
             # Blue rooms
             'Pantry': '+4 Gold',
             'Den': '+1 Gem',
-            'Trophy_room': '+8 Gems, +5 Gold',
+            'Trophy_room': '-1 Gem, +8 Gems, +5 Gold, Has Locked door',
+            'Parlor': 'Has Locked door',
             'Ballroom': 'Sets Gems to 2',
+            'Gallery': 'Has Locked door',
             'Music Room': '+1 Key',
             'Locker Room': '+1 Key',
             'Freezer': 'Locks certain room effects',
@@ -56,29 +58,46 @@ class GUI :
             'Sauna': '+20 Steps',
             'Attic': '+2 random items',
             # Green rooms
+            'Cloister': '-3 Gems',
+            'Courtyard': '-1 Gem',
+            'Greenhouse': '-1 Gems',
             'Morning Room': '+2 Gems',
-            'Patio': '+4 Gems',
+            'Patio': '-1 Gem, +4 Gems',
             'Secret Garden': '+8 Steps, +1 Gold',
             'Terrace': 'All Green Rooms cost 0 Gems',
-            'Veranda': '+1 random item',
+            'Veranda': '-2 Gems, +1 random item, Has Locked door',
             # Orange
-            'Great Hall': '-4 Keys',
+            'Great Hall': '-3 Gems, Has Locked doors',
+            'Corridor': '-1 Gem',
+            'East Wing Hall': '-1 Gem, Has Locked door',
+            'Foyer': '-1 Gem',
+            'Passageway': 'Has Locked doors',
+            'Secret Passage': 'Has Locked doors',
+            'West Wing Hall': 'Has Locked door',
             # Purple
             'Bedroom': '+10 Steps, +2 Gold',
-            'Bunk Room': '+20 Steps, +4 Gold',
+            'Bunk Room': '-1 Gem, +20 Steps, +4 Gold',
             'Guest Bedroom': '+10 Steps',
             "Her Ladyship's Chamber": '+10 Steps, +3 Gems, +2 Gold',
             'Master Bedroom': '+10 Steps',
             'Nursery': '+5 Steps, -2 Gold',
             "Servant's Quarters": '+2 Keys',
             # Red
-            'Archives': '-4 Keys',
-            'Chapel': '-5 Gold',
-            'Gymnasium': '-10 Steps',
+            'Archives': '-3 Gems, Has Locked doors',
+            'Chapel': '-5 Gold, Has Locked door',
+            'Dark Room': 'Has Locked doors',
+            'Gymnasium': '-1 Gem, -10 Steps',
             'Furnace': '-10 Steps',
-            'Weight Room': 'Divide your Steps by 2',
+            'Weight Room': 'Divide your Steps by 2, Has Locked doors',
             # Yellow
-            'Laundry Room': '-5 Gold'
+            'Bookshop': 'Has Locked door',
+            'Commissary': 'Has Locked door',
+            'Laundry Room': '-5 Gold',
+            'Kitchen': '-1 Gem',
+            'Mount Holly Gift Shop': 'Has Locked doors',
+            'Locksmith': '-2 Gems',
+            'Showroom': '-2 Gems',
+            'The Armory': 'Has Locked door'
         }
 
     def __wrap_text(self, text: str, max_width: int, font: pygame.font.Font) -> list:
@@ -184,14 +203,18 @@ class GUI :
             inventory = input["inventory"]
             self.__update_inventory(inventory)
 
-            pygame.draw.rect(self.screen, (31, 31, 31), pygame.Rect((450,385), (500, 285)),border_radius = 20)
-            pygame.draw.rect(self.screen, (35, 75, 225), pygame.Rect((450,385), (500, 285)), width = 5, border_radius = 20)
+            # slightly lower top margin for the right-hand panel
+            pygame.draw.rect(self.screen, (31, 31, 31), pygame.Rect((450,395), (500, 285)),border_radius = 20)
+            pygame.draw.rect(self.screen, (35, 75, 225), pygame.Rect((450,395), (500, 285)), width = 5, border_radius = 20)
 
             if input["ask_Create_room"] : 
                 room_option = input["room_option"]
                 cursor = input["cursor"]
                 blocked_rooms = input.get("blocked_rooms", [])
                 self.__update_ask_room(room_option, cursor, blocked_rooms)
+            if input.get("ask_unlock"):
+                # show unlock prompt over the right-hand panel
+                self.__update_ask_unlock(input.get("unlock_cursor", 0), input.get("unlock_cursor_color", "white"))
             
 
 
@@ -243,11 +266,15 @@ class GUI :
                 if next_room_north == None:
                     if current_door_north == "open":
                         pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
+                    elif current_door_north == "locked":
+                        pygame.draw.rect(self.screen, (255,165,0), pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
                     elif current_door_north == "none":
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
                 else :
                     if current_door_north == "open" and next_door_north == "open":
                         pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
+                    elif current_door_north == "locked" or next_door_north == "locked":
+                        pygame.draw.rect(self.screen, (255,165,0), pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
                     elif current_door_north == "none" or next_door_north == "none":
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (WIDTH, HEIGHT)))
             
@@ -255,11 +282,15 @@ class GUI :
                 if next_room_west == None:
                     if current_door_west == "open":
                         pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                    elif current_door_west == "locked":
+                        pygame.draw.rect(self.screen, (255,165,0), pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
                     elif current_door_west == "none":
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
                 else :
                     if current_door_west == "open" and next_door_west == "open":
                         pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                    elif current_door_west == "locked" or next_door_west == "locked":
+                        pygame.draw.rect(self.screen, (255,165,0), pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
                     elif current_door_west == "none" or next_door_west == "none":
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
             
@@ -267,11 +298,15 @@ class GUI :
                 if next_room_south == None:
                     if current_door_south == "open":
                         pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
+                    elif current_door_south == "locked":
+                        pygame.draw.rect(self.screen, (255,165,0), pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
                     elif current_door_south == "none":
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
                 else :
                     if current_door_south == "open" and next_door_south == "open":
                         pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
+                    elif current_door_south == "locked" or next_door_south == "locked":
+                        pygame.draw.rect(self.screen, (255,165,0), pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
                     elif current_door_south == "none" or next_door_south == "none":
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH, player_pos[1] * WIDTH + (WIDTH - HEIGHT)), (WIDTH, HEIGHT)))
             
@@ -279,11 +314,15 @@ class GUI :
                 if next_room_east == None:
                     if current_door_east == "open":
                         pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                    elif current_door_east == "locked":
+                        pygame.draw.rect(self.screen, (255,165,0), pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
                     elif current_door_east == "none":
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
                 else :
                     if current_door_east == "open" and next_door_east == "open":
                         pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
+                    elif current_door_east == "locked" or next_door_east == "locked":
+                        pygame.draw.rect(self.screen, (255,165,0), pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
                     elif current_door_east == "none" or next_door_east == "none":
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
             
@@ -393,13 +432,14 @@ class GUI :
         if blocked_rooms is None:
             blocked_rooms = []
 
+        top_y = 410  # 10 pixels lower than before (was 400)
         for i, room in enumerate(room_option) : 
             image = pygame.image.load(room.image)
             image = pygame.transform.scale(image, (150, 150))
             # dim image if blocked
             if i in blocked_rooms:
                 image.set_alpha(100)
-            self.screen.blit(image, (463 + (i * 162), 390))
+            self.screen.blit(image, (463 + (i * 162), top_y))
             # draw description text under each room
             desc = self.room_descriptions.get(room.name, "")
             if desc:
@@ -411,13 +451,35 @@ class GUI :
                 for li, line in enumerate(lines[:3]):
                     text = font.render(line, True, text_color)
                     tr = text.get_rect()
-                    tr.center = (463 + (i * 162) + 75, 390 + 150 + 12 + (li * 18))
+                    tr.center = (463 + (i * 162) + 75, top_y + 150 + 22 + (li * 18))  # 22 instead of 12 (10 pixels lower)
                     self.screen.blit(text, tr)
+        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), top_y), (150, HEIGHT)))
+        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), top_y), (HEIGHT, 150)))
+        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), top_y + (150 - HEIGHT)), (150, HEIGHT)))
+        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162) + (150 - HEIGHT), top_y), (HEIGHT, 150)))
 
-        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), 390), (150, HEIGHT)))
-        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), 390), (HEIGHT, 150)))
-        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162), 390 + (150 - HEIGHT)), (150, HEIGHT)))
-        pygame.draw.rect(self.screen, "white", pygame.Rect((463 + (cursor * 162) + (150 - HEIGHT), 390), (HEIGHT, 150)))
+    def __update_ask_unlock(self, cursor: int, cursor_color: str):
+        # simple centered unlock confirmation on the right-hand panel
+        font = pygame.font.Font('freesansbold.ttf', 28)
+        text = "Do you want to unlock this door ?"
+        rendered = font.render(text, True, (225, 225, 225))
+        rect = rendered.get_rect()
+        rect.center = (700, 450)
+        self.screen.blit(rendered, rect)
+
+        # yes/no options
+        opt_font = pygame.font.Font('freesansbold.ttf', 22)
+        no_text = opt_font.render("No", True, (225, 225, 225))
+        yes_text = opt_font.render("Yes", True, (225, 225, 225))
+        no_r = no_text.get_rect()
+        yes_r = yes_text.get_rect()
+        no_r.center = (575, 520)
+        yes_r.center = (825, 520)
+        self.screen.blit(no_text, no_r)
+        self.screen.blit(yes_text, yes_r)
+
+        # draw cursor box around selection
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((535 + (cursor * 250), 480 + (80 - HEIGHT)), (80, HEIGHT)))
   
     def quit() : 
         """
