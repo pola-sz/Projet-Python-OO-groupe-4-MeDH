@@ -356,11 +356,9 @@ class Engine :
         if door == "locked" : 
             new_input["locked"] = 1
             new_input["cursor"] == 0
-            print(1)
         elif door == "dlocked":
             new_input["locked"] = 2
             new_input["cursor"] == 0
-            print(2)
 
         elif door == "open" : 
             new_input["cursor"] = 0

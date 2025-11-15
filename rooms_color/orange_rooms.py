@@ -41,6 +41,12 @@ class Corridor(Orange_Room) :
     def apply_effects(self, input : dict):
         new_input = input.copy()
         if self.initialisation :
+            map = new_input["map"]
+            pos = new_input["player_pos"]
+            doors = map[pos[1]][pos[0]].doors
+            for i in ["N", "S", "W", "E"]:
+                if doors[i] == "locked" or doors[i] == "dlocked" : 
+                    doors[i] = "open"
             self.initialisation = False
         return new_input
     
@@ -71,6 +77,12 @@ class Foyer(Orange_Room) :
     def apply_effects(self, input : dict):
         new_input = input.copy()
         if self.initialisation :
+            map = new_input["map"]
+            pos = new_input["player_pos"]
+            doors = map[pos[1]][pos[0]].doors
+            for i in ["N", "S", "W", "E"]:
+                if doors[i] == "locked" or doors[i] == "dlocked" : 
+                    doors[i] = "open"
             self.initialisation = False
         return new_input
 

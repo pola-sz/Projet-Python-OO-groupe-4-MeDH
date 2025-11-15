@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-from inventory import Inventory
-import random
 
 class Rooms(ABC) :
     possible_door_states = {"open","locked","dlocked","none"}
