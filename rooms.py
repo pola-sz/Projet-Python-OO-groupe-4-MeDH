@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
+from inventory import Inventory
+import numpy as np
 
 class Rooms(ABC) :
     possible_door_states = {"open","locked","dlocked","none"}
     possible_door_locations = {"N","S","E","W"}
     possible_colors = {"blue","yellow","purple","red","orange","green"}
-
+    item_options = ['shovel', 'hammer', 'crochet_kit', 'metal_detector', 'rabbit_foot', 'coins', 'gems', 'keys', 'dices']
+    food_options = ['apple', 'banana', 'cake', 'sandwich', 'dinner']
     def __init__(self, name : str, image : str, doors : dict, cost : int, rarity : int):
         """Create a room
 
@@ -69,4 +72,24 @@ class Rooms(ABC) :
     def apply_effects(self, input : dict) : 
         pass
 
-
+    def random_item_spawn(self,inventory):
+        if np.random.rand() < inventory.coins_chance:
+            inventory.coins += 1
+        if np.random.rand() < inventory.gems_chance:
+            inventory.gems += 1
+        if np.random.rand() < inventory.keys_chance:
+            inventory.keys += 1
+        if np.random.rand() < inventory.dices_chance:
+            inventory.dices += 1
+        if np.random.rand() < inventory.object_list.shovel_chance:
+            inventory.object_list.shovel = True
+            Rooms.item_options.remove('shovel')
+        if np.random.rand() < inventory.object_list.hammer_chance:
+            inventory.object_list.hammer = True
+            Rooms.item_options.remove('hammer')
+        if np.random.rand() < inventory.object_list.crochet_kit_chance:
+            inventory.object_list.crochet_kit = True
+            Rooms.item_options.remove('crochet_kit')
+        if np.random.rand() < inventory.object_list.metal_detector_chance:
+            inventory.object_list.metal_detector = True
+            Rooms.item_options.remove('metal_detector')
