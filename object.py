@@ -29,7 +29,3 @@ class Object :
         if self.rabbit_foot:
             items.append("rabbit foot")
         return "".join(items) if items else "empty"
-
-
-#Please implement an str magic function
-# else it's not going to be shown on the screen !!!!

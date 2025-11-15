@@ -28,7 +28,8 @@ class Engine :
                  "room_option" : None,
                  "win" : False,
                  "lose" : False,
-                 "nb_rooms" : 2}
+                 "nb_rooms" : 2,
+                 "shop" : None}
         return input
 
     def initialize_map():
@@ -69,6 +70,9 @@ class Engine :
 
             elif current_input["locked"] != None : 
                 new_input = Engine.__unlock(current_input)
+            
+            elif current_input["shop"] != None : 
+                new_input = Engine.__shop(current_input)
 
             else : 
                 new_input = Engine.__move_player(current_input)
@@ -457,4 +461,34 @@ class Engine :
         elif key == "K" and food.dinner > 0:
             inv.steps += 25
             food.dinner -= 1
+        
+    def __shop(current_input : dict) : 
+
+        new_input = current_input.copy()
+        inventory = new_input["inventory"]
+        cursor = current_input["cursor"]
+        key = current_input["key_pressed"]
+        shop = current_input["shop"]
+
+        if key == "RIGHT" : 
+            new_input["cursor"] = min(len(shop) - 1, cursor + 1)
+
+        elif key == "LEFT" : 
+            new_input["cursor"] = max(0, cursor - 1)
+
+        elif key == "ESCAPE" : 
+            new_input["shop"] = None
+            
+        elif key == "RETURN" or key == "SPACE" :
+            if current_input["cursor_color"] == "white" :
+                pos = current_input["player_pos"]
+                map = current_input["map"]
+                room = map[pos[1]][pos[0]]
+                room.sellables.remove(shop[cursor])
+                shop[cursor].use_object(inventory)
+                new_input["shop"] = None
+
+        new_input["cursor_color"] = "white" if shop[cursor].price <= inventory.coins else "red"
+        return new_input
+
 

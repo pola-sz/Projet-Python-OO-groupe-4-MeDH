@@ -102,8 +102,6 @@ class GUI :
             self.screen.fill("blue")
             pygame.draw.rect(self.screen, "black", pygame.Rect((0, 0), (400, 720)))
 
-            
-
             player_orient = input["player_orient"]
             map = input["map"]
             self.__update_map(map)
@@ -114,25 +112,6 @@ class GUI :
 
             inventory = input["inventory"]
             self.__update_inventory(inventory)
-
-            pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285)))
-            font = pygame.font.Font('freesansbold.ttf', 20)
-            text1 = font.render("P : To eat Apple", True, "white")
-            text2 = font.render("M : To eat Banana", True, "white")
-            text3 = font.render("O : To eat Cake", True, "white")
-            text4 = font.render("L : To eat Sandwich", True, "white")
-            text5 = font.render("K : To eat Dinner", True, "white")
-            food_exist = input["inventory"].object_list
-            if food_exist.apple > 0:
-                self.screen.blit(text1, (460, 395))
-            if food_exist.banana > 0:
-                self.screen.blit(text2, (460, 420))
-            if food_exist.cake > 0:
-                self.screen.blit(text3, (460, 445))
-            if food_exist.sandwich > 0:
-                self.screen.blit(text4, (460, 470))
-            if food_exist.dinner > 0:
-                self.screen.blit(text5, (460, 495))
 
             if input["ask_Create_room"] : 
                 pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285)))
@@ -148,6 +127,14 @@ class GUI :
                 cursor_color = input["cursor_color"]
                 locked = input["locked"]
                 self.__update_ask_unlock(cursor, cursor_color, locked)
+            
+            elif input["shop"] != None : 
+                pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285))) 
+                cursor = input["cursor"]
+                cursor_color = input["cursor_color"]
+                shop = input["shop"]
+                self.__update_shop(cursor, cursor_color, shop)
+                
         
         pygame.display.flip()
 
@@ -287,16 +274,7 @@ class GUI :
         names = ("steps", "coins", "gems", "keys", "dices")
         #numbers = (inventory.steps, inventory.coins, inventory.gems, inventory.keys, inventory.dices)
         icon_size = (32, 32)
-        """ for i in range(5) : 
-            
-            to_print = str(numbers[i]) + " " + names[i]
-            font = pygame.font.Font('freesansbold.ttf', 20)
-            text = font.render(to_print, True, "black")
-            textRect = text.get_rect()
-            cX = 575 + (i % 3) * 125
-            cY = 100 + (i // 3) * 40
-            textRect.center = (cX, cY )
-            self.screen.blit(text, textRect) """
+    
         for i, name in enumerate(icons.keys()):
             # Icon
             icon = pygame.transform.scale(icons[name], icon_size)
@@ -313,30 +291,6 @@ class GUI :
 
         #print objects
 
-        """ for i, el in enumerate(inventory.object_list): 
-            font = pygame.font.Font('freesansbold.ttf', 20)
-            text = font.render(str(el), True, "black")
-            textRect = text.get_rect()
-            cX = 575 + (i % 3) * 125
-            cY = 200 + (i // 3) * 40
-
-            textRect.center = (cX, cY )
-            self.screen.blit(text, textRect) """
-        
-        """ if inventory.object_list != "empty":
-            pass
-            print(inventory.object_list)
-        else:
-            print(inventory.object_list)
-            i= 1
-            font = pygame.font.Font('freesansbold.ttf', 20)
-            text = font.render("goulash", True, "black")
-            textRect = text.get_rect()
-            cX = 575 + (i % 3) * 125
-            cY = 200 + (i // 3) * 40
-
-            textRect.center = (cX, cY )
-            self.screen.blit(text, textRect) """
         i=0
         for key, value in inventory.object_list.__dict__.items(): 
             if value == True or (isinstance(value, int) and value > 0):
@@ -366,6 +320,24 @@ class GUI :
                 textRect.center = (cX, cY )
                 self.screen.blit(text, textRect)
                 i+=1
+        pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285)))
+        font = pygame.font.Font('freesansbold.ttf', 20)
+        text1 = font.render("P : To eat Apple", True, "white")
+        text2 = font.render("M : To eat Banana", True, "white")
+        text3 = font.render("O : To eat Cake", True, "white")
+        text4 = font.render("L : To eat Sandwich", True, "white")
+        text5 = font.render("K : To eat Dinner", True, "white")
+        food_exist = inventory.object_list
+        if food_exist.apple > 0:
+            self.screen.blit(text1, (460, 395))
+        if food_exist.banana > 0:
+            self.screen.blit(text2, (460, 420))
+        if food_exist.cake > 0:
+            self.screen.blit(text3, (460, 445))
+        if food_exist.sandwich > 0:
+            self.screen.blit(text4, (460, 470))
+        if food_exist.dinner > 0:
+            self.screen.blit(text5, (460, 495))
     
     def __update_ask_room(self, room_option : list, cursor : int, cursor_color : str, dice :int):
 
@@ -418,6 +390,23 @@ class GUI :
     
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((535 + (cursor * 250), 560 + (80 - HEIGHT)), (80, HEIGHT)))
         
+    def __update_shop(self, cursor : int, cursor_color : str, shop : list) : 
+        for i, item in enumerate(shop) : 
+            font = pygame.font.Font('freesansbold.ttf', 15)
+            text = font.render(item.name, True, "white")
+            textRect = text.get_rect()
+            textRect.center = (538 + (i * 162), 450)
+            self.screen.blit(text, textRect)
+
+            font = pygame.font.Font('freesansbold.ttf', 20)
+            text = f"{item.price} coins"
+            text = font.render(text, True, "white")
+            textRect = text.get_rect()
+            textRect.center = (538 + (i * 162), 590)
+            self.screen.blit(text, textRect)
+        
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400 + (150 - HEIGHT)), (150, HEIGHT)))
+
 
 
     def quit() : 
