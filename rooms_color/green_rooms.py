@@ -6,7 +6,7 @@ class Green_Room(Rooms):
 
 class Terrace(Green_Room):
     def __init__(self):
-        super().__init__("Terrace", "images/green_rooms/Terrace_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"}, 0, 1)
+        super().__init__("Terrace", "Rooms & Icons\Green Rooms\Terrace_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"}, 0, 1)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -16,7 +16,7 @@ class Terrace(Green_Room):
         
 class Patio(Green_Room):
     def __init__(self):
-        super().__init__("Patio", "images/green_rooms/Patio_Icon.webp",{"N":"open","S":"open","E":"none","W":"open"}, 1, 1)
+        super().__init__("Patio", "Rooms & Icons\Green Rooms\Patio_Icon.webp",{"N":"open","S":"open","E":"none","W":"open"}, 1, 1)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -26,7 +26,7 @@ class Patio(Green_Room):
 
 class Courtyard(Green_Room):
     def __init__(self):
-        super().__init__("Courtyard", "images/green_rooms/Courtyard_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"}, 1, 1)
+        super().__init__("Courtyard", "Rooms & Icons\Green Rooms\Courtyard_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"}, 1, 1)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -36,7 +36,7 @@ class Courtyard(Green_Room):
     
 class Coister(Green_Room):
     def __init__(self):
-        super().__init__("Coister", "images/green_rooms/Coister_Icon.webp",{"N":"open","S":"open","E":"open","W":"open"}, 3, 2)
+        super().__init__("Coister", "Rooms & Icons\Green Rooms\Coister_Icon.webp",{"N":"open","S":"open","E":"open","W":"open"}, 3, 2)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -46,7 +46,7 @@ class Coister(Green_Room):
 
 class Veranda(Green_Room):
     def __init__(self):
-        super().__init__("Veranda", "images/green_rooms/Veranda_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"}, 2, 2)
+        super().__init__("Veranda", "Rooms & Icons\Green Rooms\Veranda_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"}, 2, 2)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -56,7 +56,7 @@ class Veranda(Green_Room):
 
 class Greenhouse(Green_Room):
     def __init__(self):
-        super().__init__("Greenhouse", "images/green_rooms/Greenhouse_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"}, 2, 2)
+        super().__init__("Greenhouse", "Rooms & Icons\Green Rooms\Greenhouse_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"}, 2, 2)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -66,7 +66,7 @@ class Greenhouse(Green_Room):
 
 class Morning_Room(Green_Room):
     def __init__(self):
-        super().__init__("Morning Room", "images/green_rooms/Morning_Room_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 0, 3)
+        super().__init__("Morning Room", "Rooms & Icons\Green Rooms\Morning_Room_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 0, 3)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -78,7 +78,7 @@ class Morning_Room(Green_Room):
 
 class Secret_Garden(Green_Room):
     def __init__(self):
-        super().__init__("Secret Garden", "images/green_rooms/Secret_Garden_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"}, 0, 3)
+        super().__init__("Secret Garden", "Rooms & Icons\Green Rooms\Secret_Garden_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"}, 0, 3)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()

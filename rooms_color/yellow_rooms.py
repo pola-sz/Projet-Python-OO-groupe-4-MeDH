@@ -6,7 +6,7 @@ class Yellow_Room(Rooms):
 
 class Commissary(Yellow_Room):
     def __init__(self):
-        super().__init__("Commissary", "images/yellow_rooms/Commissary_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 1, 1)
+        super().__init__("Commissary", "Rooms & Icons\Yellow Rooms\Commissary_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 1, 1)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -16,7 +16,7 @@ class Commissary(Yellow_Room):
 
 class Kitchen(Yellow_Room):
     def __init__(self):
-        super().__init__("Kitchen", "images/yellow_rooms/Kitchen_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 1, 0)
+        super().__init__("Kitchen", "Rooms & Icons\Yellow Rooms\Kitchen_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 1, 0)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -26,7 +26,7 @@ class Kitchen(Yellow_Room):
 
 class Locksmith(Yellow_Room):
     def __init__(self):
-        super().__init__("Locksmith", "images/yellow_rooms/Locksmith_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"}, 1, 2)
+        super().__init__("Locksmith", "Rooms & Icons\Yellow Rooms\Locksmith_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"}, 1, 2)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -36,7 +36,7 @@ class Locksmith(Yellow_Room):
     
 class Showroom(Yellow_Room):
     def __init__(self):
-        super().__init__("Showroom", "images/yellow_rooms/Showroom_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"}, 2, 3)
+        super().__init__("Showroom", "Rooms & Icons\Yellow Rooms\Showroom_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"}, 2, 3)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -46,7 +46,7 @@ class Showroom(Yellow_Room):
 
 class Laundry_Room(Yellow_Room):
     def __init__(self):
-        super().__init__("Laundry Room", "images/yellow_rooms/Laundry_Room_Icon.webp",{"N":"none","S":"none","E":"none","W":"none"}, 1, 3)
+        super().__init__("Laundry Room", "Rooms & Icons\Yellow Rooms\Laundry_Room_Icon.webp",{"N":"none","S":"none","E":"none","W":"none"}, 1, 3)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -56,7 +56,7 @@ class Laundry_Room(Yellow_Room):
 
 class Bookshop(Yellow_Room):
     def __init__(self):
-        super().__init__("Bookshop", "images/yellow_rooms/Bookshop_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 1, 3)
+        super().__init__("Bookshop", "Rooms & Icons\Yellow Rooms\Bookshop_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 1, 3)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -66,7 +66,7 @@ class Bookshop(Yellow_Room):
     
 class The_Armory(Yellow_Room):
     def __init__(self):
-        super().__init__("The Armory", "images/yellow_rooms/The_Armory_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 0, 1)
+        super().__init__("The Armory", "Rooms & Icons\Yellow Rooms\The_Armory_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 0, 1)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -76,7 +76,7 @@ class The_Armory(Yellow_Room):
 
 class Mount_Holly_Gift_Shop(Yellow_Room):
     def __init__(self):
-        super().__init__("Mount Holly Gift Shop", "images/yellow_rooms/Mount_Holly_Gift_Shop_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"}, 0, 3)
+        super().__init__("Mount Holly Gift Shop", "Rooms & Icons\Yellow Rooms\Mount_Holly_Gift_Shop_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"}, 0, 3)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
