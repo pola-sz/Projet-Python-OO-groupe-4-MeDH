@@ -142,7 +142,8 @@ class GUI :
                 dice = input["inventory"].dices
                 self.__update_ask_room(room_option, cursor, cursor_color,dice)
 
-            elif input["locked"] != None : 
+            elif input["locked"] != None :
+                pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285))) 
                 cursor = input["cursor"]
                 cursor_color = input["cursor_color"]
                 locked = input["locked"]
@@ -338,7 +339,7 @@ class GUI :
             self.screen.blit(text, textRect) """
         i=0
         for key, value in inventory.object_list.__dict__.items(): 
-            if value == True:
+            if value == True or (isinstance(value, int) and value > 0):
                 font = pygame.font.Font('freesansbold.ttf', 20)
                 if key == "crochet_kit":
                     display_key = "crochet kit"
@@ -346,13 +347,22 @@ class GUI :
                     display_key = "metal detector"
                 elif key == "rabbit_foot":
                     display_key = "rabbit foot"
+                elif key =="apple":
+                    display_key = f"apple x{inventory.object_list.apple}"
+                elif key =="banana":
+                    display_key = f"banana x{inventory.object_list.banana}"
+                elif key =="cake":
+                    display_key = f"cake x{inventory.object_list.cake}"
+                elif key =="sandwich":
+                    display_key = f"sandwich x{inventory.object_list.sandwich}"
+                elif key =="dinner":
+                    display_key = f"dinner x{inventory.object_list.dinner}"
                 else:
                     display_key = key
                 text = font.render(str(display_key), True, "black")
                 textRect = text.get_rect()
                 cX = 575 + (i % 3) * 150
                 cY = 200 + (i // 3) * 40
-
                 textRect.center = (cX, cY )
                 self.screen.blit(text, textRect)
                 i+=1

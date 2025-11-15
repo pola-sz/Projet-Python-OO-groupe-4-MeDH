@@ -61,7 +61,7 @@ class Engine :
 
         #if we are still running the game
         if current_input["running"] :
-
+            Engine.__consume(current_input)
             # if we are in the process of creating a room
             if current_input["ask_Create_room"] : 
                 new_input = Engine.__askCreateRoom(current_input)
@@ -442,3 +442,24 @@ class Engine :
 
         return str(choix)
     
+    def __consume(input : dict):
+        key = input["key_pressed"]
+        inv = input["inventory"]
+        food = input["inventory"].object_list
+
+        if key == "P" and food.apple > 0:
+            inv.steps += 2
+            food.apple -= 1
+        elif key == "M" and food.banana > 0:
+            inv.steps += 3
+            food.banana -= 1
+        elif key == "O" and food.cake > 0:  
+            inv.steps += 10
+            food.cake -= 1
+        elif key == "L" and food.sandwich > 0:
+            inv.steps += 15
+            food.sandwich -= 1
+        elif key == "K" and food.dinner > 0:
+            inv.steps += 25
+            food.dinner -= 1
+

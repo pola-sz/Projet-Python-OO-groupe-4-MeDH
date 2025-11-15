@@ -5,6 +5,11 @@ class Object :
         self.crochet_kit = False
         self.metal_detector = False
         self.rabbit_foot = False
+        self.apple = 0
+        self.banana = 0
+        self.cake = 0
+        self.sandwich = 0
+        self.dinner = 0
     
     def __str__(self):
         items = []
