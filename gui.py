@@ -385,11 +385,12 @@ class GUI :
         if dice > 0:
             text_re = font.render("ESC : To Reroll", True, "white")
             self.screen.blit(text_re, (640, 620))
-        
-        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400), (150, HEIGHT)))
-        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400), (HEIGHT, 150)))
-        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400 + (150 - HEIGHT)), (150, HEIGHT)))
-        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162) + (150 - HEIGHT), 400), (HEIGHT, 150)))
+        h,w = 150,150
+        size = 4
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400), (w, h)),width= size)
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400), (h, w)),width= size)
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400 + (w - h)), (w, h)),width= size)
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162) + (w - h), 400), (h, w)),width= size)
     
     def __update_ask_unlock(self, cursor : int, cursor_color : str, locked : int, crochet_kit : bool) : 
         """Update the window that ask the player to unlock a room

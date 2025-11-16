@@ -523,26 +523,29 @@ class Engine :
         cursor = current_input["cursor"]
         key = current_input["key_pressed"]
         shop = current_input["shop"]
-
+        
+        new_input["cursor_color"] = "white" if shop[cursor].price <= inventory.coins else "red"
         if key == "RIGHT" : 
             new_input["cursor"] = min(len(shop) - 1, cursor + 1)
+            new_input["cursor_color"] = "white" if shop[cursor].price <= inventory.coins else "red"
 
         elif key == "LEFT" : 
             new_input["cursor"] = max(0, cursor - 1)
+            new_input["cursor_color"] = "white" if shop[cursor].price <= inventory.coins else "red"
 
         elif key == "ESCAPE" : 
             new_input["shop"] = None
-            
+
         elif key == "RETURN" or key == "SPACE" :
             if current_input["cursor_color"] == "white" :
                 pos = current_input["player_pos"]
                 map = current_input["map"]
                 room = map[pos[1]][pos[0]]
-                room.sellables.remove(shop[cursor])
                 new_input["inventory"] = shop[cursor].use_object(inventory)
+                room.sellables.remove(shop[cursor])
                 new_input["shop"] = None
-
-        new_input["cursor_color"] = "white" if shop[cursor].price <= inventory.coins else "red"
+        
+        
         return new_input
 
 
