@@ -4,6 +4,7 @@ import numpy as np
 class Green_Room(Rooms):
     def __init__(self, name, image, doors, cost, rarity):
         super().__init__(name, image, doors, cost, rarity)
+        
 
 class Terrace(Green_Room):
     def __init__(self):
@@ -44,6 +45,8 @@ class Courtyard(Green_Room):
 class Cloister(Green_Room):
     def __init__(self):
         super().__init__("Cloister", "Rooms & Icons\Green Rooms\Cloister_Icon.webp",{"N":"open","S":"open","E":"open","W":"open"}, 3, 2)
+        if np.random.rand() < 0.5:
+            self.dig_spot = np.random.randint(2,4)
     
     def apply_effects(self, input : dict):
         new_input = input.copy()
@@ -56,7 +59,9 @@ class Cloister(Green_Room):
 class Veranda(Green_Room):
     def __init__(self):
         super().__init__("Veranda", "Rooms & Icons\Green Rooms\Veranda_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"}, 2, 2)
-    
+        if np.random.rand() < 0.5:
+            self.dig_spot = np.random.randint(2,4)
+
     def apply_effects(self, input : dict):
         new_input = input.copy()
         inventory = new_input["inventory"]

@@ -122,7 +122,8 @@ class Pantry(Blue_Room) :
 class Den(Blue_Room) : 
     def __init__(self) : 
         super().__init__("Den", "Rooms & Icons\Blue Rooms\Den_Icon.webp", {"N":"none","S":"open","E":"open","W":"open"}, 0, 0)
-    
+        self.chest = True
+        
     def apply_effects(self, input : dict):
         new_input = input.copy()
         inventory = new_input["inventory"]
