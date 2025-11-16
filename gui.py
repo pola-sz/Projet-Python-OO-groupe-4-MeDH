@@ -425,7 +425,7 @@ class GUI :
         textRect.center = (600, 550)
         self.screen.blit(text, textRect)
 
-        if crochet_kit:
+        if crochet_kit and locked == 1:
             font = pygame.font.Font('freesansbold.ttf', 25)
             text = font.render("Use The Crochet Kit", True, "white")
             textRect = text.get_rect()
