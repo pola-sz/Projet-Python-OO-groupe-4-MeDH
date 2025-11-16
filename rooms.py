@@ -26,6 +26,8 @@ class Rooms(ABC) :
         self.__rarity = rarity
         self.orientation = 0
         self.initialisation = True
+        self.dig_spot = 0
+        self.chest = False
         
 
     """@doors.setter
@@ -81,15 +83,15 @@ class Rooms(ABC) :
             inventory.keys += 1
         if np.random.rand() < inventory.dices_chance:
             inventory.dices += 1
-        if np.random.rand() < inventory.object_list.shovel_chance:
+        if np.random.rand() < inventory.object_list.shovel_chance and 'shovel' in Rooms.item_options:
             inventory.object_list.shovel = True
             Rooms.item_options.remove('shovel')
-        if np.random.rand() < inventory.object_list.hammer_chance:
+        if np.random.rand() < inventory.object_list.hammer_chance and 'hammer' in Rooms.item_options:
             inventory.object_list.hammer = True
             Rooms.item_options.remove('hammer')
-        if np.random.rand() < inventory.object_list.crochet_kit_chance:
+        if np.random.rand() < inventory.object_list.crochet_kit_chance and 'crochet_kit' in Rooms.item_options:
             inventory.object_list.crochet_kit = True
             Rooms.item_options.remove('crochet_kit')
-        if np.random.rand() < inventory.object_list.metal_detector_chance:
+        if np.random.rand() < inventory.object_list.metal_detector_chance and 'metal_detector' in Rooms.item_options:
             inventory.object_list.metal_detector = True
             Rooms.item_options.remove('metal_detector')

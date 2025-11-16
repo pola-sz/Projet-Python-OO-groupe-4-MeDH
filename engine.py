@@ -381,6 +381,7 @@ class Engine :
         cursor_color = current_input["cursor_color"]
         locked = current_input["locked"]
         key = current_input["key_pressed"]
+        kit = inventory.object_list.crochet_kit
 
         if locked == 1 : 
             able_to_open = inventory.object_list.rabbit_foot or inventory.keys >= 1
@@ -389,7 +390,7 @@ class Engine :
 
 
         if key == "RIGHT" : 
-            new_input["cursor"] = min(1, cursor + 1)
+            new_input["cursor"] = min(2, cursor + 1)
         elif key == "LEFT" : 
             new_input["cursor"] = max(0, cursor - 1)
 
@@ -399,7 +400,7 @@ class Engine :
                 new_input["cursor"] = None
                 new_input["locked"] = None
                 return new_input
-            else : #cursor == 1, the player want and can unlock the door
+            elif cursor == 1: #cursor == 1, the player want and can unlock the door
                 map = new_input["map"]
                 pos = new_input["player_pos"]
                 orient = new_input["player_orient"]
@@ -407,6 +408,16 @@ class Engine :
                 new_input["cursor"] = 0
                 new_input["ask_Create_room" ] = True
                 new_input["inventory"].keys -= locked
+                new_input["locked"] = None
+                new_input["room_option"] = Engine.__three_rooms()
+            
+            elif cursor == 2 and kit : #cursor == 2, the player want to use the crochet kit
+                map = new_input["map"]
+                pos = new_input["player_pos"]
+                orient = new_input["player_orient"]
+                map[pos[1]][pos[0]].doors[orient] = "open"
+                new_input["cursor"] = 0
+                new_input["ask_Create_room" ] = True
                 new_input["locked"] = None
                 new_input["room_option"] = Engine.__three_rooms()
 
@@ -445,7 +456,7 @@ class Engine :
         key = input["key_pressed"]
         inv = input["inventory"]
         food = input["inventory"].object_list
-
+        room = input["map"][input["player_pos"][1]][input["player_pos"][0]]
         if key == "P" and food.apple > 0:
             inv.steps += 2
             food.apple -= 1
@@ -461,6 +472,46 @@ class Engine :
         elif key == "K" and food.dinner > 0:
             inv.steps += 25
             food.dinner -= 1
+        elif key == "E" and inv.object_list.shovel == True and room.dig_spot > 0:
+            chosen_item = np.random.choice(['coins', 'gems', 'keys', 'dices'],1)
+            match chosen_item:
+                case 'coins':
+                    inv.coins += 1
+                case 'gems':
+                    inv.gems += 1
+                case 'keys':
+                    inv.keys += 1
+                case 'dices':
+                    inv.dices += 1
+            room.dig_spot -= 1
+        elif (inv.keys >0 or inv.object_list.hammer == True) and room.chest == True:
+            if key == "V" and inv.keys >0:
+                chosen_item = np.random.choice(['coins', 'gems', 'keys', 'dices'],1)
+                match chosen_item:
+                    case 'coins':
+                        inv.coins += 1
+                    case 'gems':
+                        inv.gems += 1
+                    case 'keys':
+                        inv.keys += 1
+                    case 'dices':
+                        inv.dices += 1
+                inv.keys -= 1
+                room.chest = False
+            elif key == "C" and inv.object_list.hammer == True:
+                chosen_item = np.random.choice(['coins', 'gems', 'keys', 'dices'],1)
+                match chosen_item:
+                    case 'coins':
+                        inv.coins += 1
+                    case 'gems':
+                        inv.gems += 1
+                    case 'keys':
+                        inv.keys += 1
+                    case 'dices':
+                        inv.dices += 1
+                room.chest = False
+                
+
         
     def __shop(current_input : dict) : 
 

@@ -1,4 +1,5 @@
 from inventory import Inventory
+from rooms import Rooms
 import numpy as np
 
 class Sellable():
@@ -10,6 +11,7 @@ class Sellable():
         self.index = index
         self.name = object_name[index]
         self.price = price[index]
+
     def use_object(self, inventory : Inventory) : 
         list_object = [inventory.object_list.shovel, 
                        inventory.object_list.hammer,

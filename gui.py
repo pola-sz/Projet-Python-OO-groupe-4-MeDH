@@ -75,6 +75,14 @@ class GUI :
                     elif event.key == pygame.K_k:
                         input["key_pressed"] = "K"
 
+                    elif event.key == pygame.K_e:
+                        input["key_pressed"] = "E"
+
+                    elif event.key == pygame.K_c:
+                        input["key_pressed"] = "C"
+                    elif event.key == pygame.K_v:
+                        input["key_pressed"] = "V"
+
             
         else : 
             input["key_pressed"] = None
@@ -111,7 +119,8 @@ class GUI :
             self.__update_pos(player_pos, player_orient, map)
 
             inventory = input["inventory"]
-            self.__update_inventory(inventory)
+            room = map[player_pos[1]][player_pos[0]]
+            self.__update_inventory(inventory,room)
 
             if input["ask_Create_room"] : 
                 pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285)))
@@ -126,7 +135,8 @@ class GUI :
                 cursor = input["cursor"]
                 cursor_color = input["cursor_color"]
                 locked = input["locked"]
-                self.__update_ask_unlock(cursor, cursor_color, locked)
+                crochet_kit = input["inventory"].object_list.crochet_kit
+                self.__update_ask_unlock(cursor, cursor_color, locked,crochet_kit)
             
             elif input["shop"] != None : 
                 pygame.draw.rect(self.screen, "black", pygame.Rect((450,385), (500, 285))) 
@@ -226,9 +236,7 @@ class GUI :
                         pygame.draw.rect(self.screen, "white", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
                     elif current_door_east == "none" or next_door_east == "none":
                         pygame.draw.rect(self.screen, "red", pygame.Rect((player_pos[0] * WIDTH + (WIDTH - HEIGHT), player_pos[1] * WIDTH), (HEIGHT, WIDTH)))
-            
-                
-                
+                            
         
     def __update_map(self, map : list) : 
         """
@@ -247,7 +255,7 @@ class GUI :
                     self.screen.blit(image, (j * WIDTH, i * WIDTH))
         
 
-    def __update_inventory(self, inventory : Inventory) : 
+    def __update_inventory(self, inventory : Inventory, room : Rooms) : 
         """
         Update on the screen the contents of the inventory
 
@@ -327,6 +335,9 @@ class GUI :
         text3 = font.render("O : To eat Cake", True, "white")
         text4 = font.render("L : To eat Sandwich", True, "white")
         text5 = font.render("K : To eat Dinner", True, "white")
+        text6 = font.render("E : To Dig", True, "white")
+        text7 = font.render("C : To Smash chest", True, "white")
+        text8 = font.render("V : To unlock chest", True, "white")
         food_exist = inventory.object_list
         if food_exist.apple > 0:
             self.screen.blit(text1, (460, 395))
@@ -338,6 +349,13 @@ class GUI :
             self.screen.blit(text4, (460, 470))
         if food_exist.dinner > 0:
             self.screen.blit(text5, (460, 495))
+        if food_exist.shovel == True and room.dig_spot > 0:
+            self.screen.blit(text6, (460, 520))
+        if room.chest == True and (inventory.keys >0 or inventory.object_list.hammer == True):
+            if inventory.object_list.hammer == True:
+                self.screen.blit(text7, (460, 545))
+            if inventory.keys >0:
+                self.screen.blit(text8, (460, 570))
     
     def __update_ask_room(self, room_option : list, cursor : int, cursor_color : str, dice :int):
 
@@ -361,7 +379,7 @@ class GUI :
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162), 400 + (150 - HEIGHT)), (150, HEIGHT)))
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162) + (150 - HEIGHT), 400), (HEIGHT, 150)))
     
-    def __update_ask_unlock(self, cursor : int, cursor_color : str, locked : int) : 
+    def __update_ask_unlock(self, cursor : int, cursor_color : str, locked : int, crochet_kit : bool) : 
 
         font = pygame.font.Font('freesansbold.ttf', 30)
         text = "Do you want to open this door ?" 
@@ -373,22 +391,28 @@ class GUI :
         text = f"It requires {locked} key(s)."
         text = font.render(text, True, "white")
         textRect = text.get_rect()
-        textRect.center = (700, 500)
+        textRect.center = (700, 450)
         self.screen.blit(text, textRect)
 
-        font = pygame.font.Font('freesansbold.ttf', 20)
-        text = font.render("no", True, "white")
+        font = pygame.font.Font('freesansbold.ttf', 25)
+        text = font.render("NO", True, "white")
         textRect = text.get_rect()
-        textRect.center = (575, 600)
+        textRect.center = (500, 550)
         self.screen.blit(text, textRect)
 
-        text = font.render("yes", True, "white")
+        text = font.render("YES", True, "white")
         textRect = text.get_rect()
-        textRect.center = (825, 600)
+        textRect.center = (600, 550)
         self.screen.blit(text, textRect)
 
+        if crochet_kit:
+            font = pygame.font.Font('freesansbold.ttf', 25)
+            text = font.render("Use The Crochet Kit", True, "white")
+            textRect = text.get_rect()
+            textRect.center = (800, 550)
+            self.screen.blit(text, textRect)
     
-        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((535 + (cursor * 250), 560 + (80 - HEIGHT)), (80, HEIGHT)))
+        pygame.draw.rect(self.screen, cursor_color, pygame.Rect((475 + (cursor * 100), 500 + (80 - HEIGHT)), (80, HEIGHT)))
         
     def __update_shop(self, cursor : int, cursor_color : str, shop : list) : 
         for i, item in enumerate(shop) : 
