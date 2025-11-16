@@ -390,7 +390,10 @@ class Engine :
 
 
         if key == "RIGHT" : 
-            new_input["cursor"] = min(2, cursor + 1)
+            if kit and locked == 1:
+                new_input["cursor"] = min(2, cursor + 1)
+            else:
+                new_input["cursor"] = min(1, cursor + 1)
         elif key == "LEFT" : 
             new_input["cursor"] = max(0, cursor - 1)
 
