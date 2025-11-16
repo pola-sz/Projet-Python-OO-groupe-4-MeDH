@@ -40,21 +40,26 @@ class Attic(Blue_Room) :
                 match item:
                     case 'shovel':
                         inventory.object_list.shovel = True
-                        Rooms.item_options.remove('shovel')
+                        if 'shovel' in Rooms.item_options:
+                            Rooms.item_options.remove('shovel')
                     case 'hammer':
                         inventory.object_list.hammer = True
-                        Rooms.item_options.remove('hammer')
+                        if 'hammer' in Rooms.item_options:
+                            Rooms.item_options.remove('hammer')
                     case 'crochet_kit':
                         inventory.object_list.crochet_kit = True
-                        Rooms.item_options.remove('crochet_kit')
+                        if 'crochet_kit' in Rooms.item_options:
+                            Rooms.item_options.remove('crochet_kit')
                     case 'metal_detector':
                         inventory.object_list.metal_detector = True
-                        Rooms.item_options.remove('metal_detector')
+                        if 'metal_detector' in Rooms.item_options:
+                            Rooms.item_options.remove('metal_detector')
                         inventory.coins_chance += 0.23
                         inventory.keys_chance += 0.07
                     case 'rabbit_foot':
                         inventory.object_list.rabbit_foot = True
-                        Rooms.item_options.remove('rabbit_foot')
+                        if 'rabbit_foot' in Rooms.item_options:
+                            Rooms.item_options.remove('rabbit_foot')
                         inventory.coins_chance += 0.1
                         inventory.keys_chance += 0.1
                         inventory.gems_chance += 0.1
@@ -330,21 +335,26 @@ class Closet(Blue_Room) :
                 match item:
                     case 'shovel':
                         inventory.object_list.shovel = True
-                        Rooms.item_options.remove('shovel')
+                        if 'shovel' in Rooms.item_options:
+                            Rooms.item_options.remove('shovel')
                     case 'hammer':
                         inventory.object_list.hammer = True
-                        Rooms.item_options.remove('hammer')
+                        if 'hammer' in Rooms.item_options:
+                            Rooms.item_options.remove('hammer')
                     case 'crochet_kit':
                         inventory.object_list.crochet_kit = True
-                        Rooms.item_options.remove('crochet_kit')
+                        if 'crochet_kit' in Rooms.item_options:
+                            Rooms.item_options.remove('crochet_kit')
                     case 'metal_detector':
                         inventory.object_list.metal_detector = True
-                        Rooms.item_options.remove('metal_detector')
+                        if 'metal_detector' in Rooms.item_options:
+                            Rooms.item_options.remove('metal_detector')
                         inventory.coins_chance += 0.23
                         inventory.keys_chance += 0.07
                     case 'rabbit_foot':
                         inventory.object_list.rabbit_foot = True
-                        Rooms.item_options.remove('rabbit_foot')
+                        if 'rabbit_foot' in Rooms.item_options:
+                            Rooms.item_options.remove('rabbit_foot')
                         inventory.coins_chance += 0.1
                         inventory.keys_chance += 0.1
                         inventory.gems_chance += 0.1
