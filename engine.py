@@ -516,7 +516,7 @@ class Engine :
     def __shop(current_input : dict) : 
 
         new_input = current_input.copy()
-        inventory = new_input["inventory"]
+        inventory = current_input["inventory"]
         cursor = current_input["cursor"]
         key = current_input["key_pressed"]
         shop = current_input["shop"]
@@ -536,7 +536,7 @@ class Engine :
                 map = current_input["map"]
                 room = map[pos[1]][pos[0]]
                 room.sellables.remove(shop[cursor])
-                shop[cursor].use_object(inventory)
+                new_input["inventory"] = shop[cursor].use_object(inventory)
                 new_input["shop"] = None
 
         new_input["cursor_color"] = "white" if shop[cursor].price <= inventory.coins else "red"

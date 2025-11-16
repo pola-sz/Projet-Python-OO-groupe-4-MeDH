@@ -92,7 +92,11 @@ class GUI :
     
     def update_screen(self,input : dict) :
         """
-        """ 
+        Update the screen of the game
+
+        Args:
+            input (dict): current input
+        """
         if input["win"] or input["lose"] :
             self.screen.fill("blue")
             pygame.draw.rect(self.screen, "white", pygame.Rect((50, 50), (900, 620)))
@@ -358,6 +362,14 @@ class GUI :
                 self.screen.blit(text8, (460, 570))
     
     def __update_ask_room(self, room_option : list, cursor : int, cursor_color : str, dice :int):
+        """ Update the window that ask the player to choose a room
+
+        Args:
+            room_option (list): list of three available rooms
+            cursor (int): indicating which room the cursor is at
+            cursor_color (str): indicating the color of the cursor
+            dice (int): nb of dice
+        """
 
         for i, room in enumerate(room_option) : 
             image = pygame.image.load(room.image)
@@ -380,6 +392,14 @@ class GUI :
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((463 + (cursor * 162) + (150 - HEIGHT), 400), (HEIGHT, 150)))
     
     def __update_ask_unlock(self, cursor : int, cursor_color : str, locked : int, crochet_kit : bool) : 
+        """Update the window that ask the player to unlock a room
+
+        Args:
+            cursor (int): indicating the choice of the player
+            cursor_color (str): color of the cursor
+            locked (int): how is the door locked
+            crochet_kit (bool) : flag indicating wheter or not the player posses the crochet kit
+        """
 
         font = pygame.font.Font('freesansbold.ttf', 30)
         text = "Do you want to open this door ?" 
@@ -415,6 +435,14 @@ class GUI :
         pygame.draw.rect(self.screen, cursor_color, pygame.Rect((475 + (cursor * 100), 500 + (80 - HEIGHT)), (80, HEIGHT)))
         
     def __update_shop(self, cursor : int, cursor_color : str, shop : list) : 
+        """
+        Update the window containing the shop
+
+        Args:
+            cursor (int): indicating the choice of the player
+            cursor_color (str): color of the cursor
+            shop (list): list of sellable items
+        """
         for i, item in enumerate(shop) : 
             font = pygame.font.Font('freesansbold.ttf', 15)
             text = font.render(item.name, True, "white")

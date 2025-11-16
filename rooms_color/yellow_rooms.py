@@ -8,10 +8,11 @@ class Yellow_Room(Rooms):
 
     def apply_effects(self, input : dict):
         new_input = input.copy()
-        new_input["shop"] = self.sellables
-        new_input["cursor_color"] = "white"
-        new_input["cursor"] = 0
-        inventory = new_input["inventory"]
+        if len( self.sellables) != 0 : 
+            new_input["shop"] = self.sellables
+            new_input["cursor_color"] = "white"
+            new_input["cursor"] = 0
+            inventory = new_input["inventory"]
         if self.initialisation :
             self.random_item_spawn(inventory)
             self.initialisation = False

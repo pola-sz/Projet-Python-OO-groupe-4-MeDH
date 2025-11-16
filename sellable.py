@@ -13,27 +13,37 @@ class Sellable():
         self.price = price[index]
 
     def use_object(self, inventory : Inventory) : 
-        list_object = [inventory.object_list.shovel, 
-                       inventory.object_list.hammer,
-                       inventory.object_list.crochet_kit,
-                       inventory.object_list.metal_detector,
-                       inventory.object_list.rabbit_foot,
-                       inventory.object_list.apple,
-                       inventory.object_list.banana,
-                       inventory.object_list.cake,
-                       inventory.object_list.sandwich,
-                       inventory.object_list.dinner,
-                       inventory.keys]
-        
-        if self.index <= 5 : 
-            list_object[self.index] = True
-        else : 
-            list_object[self.index] += 1
+        match self.index : 
+            case 0 : 
+                inventory.object_list.shovel = True
+            case 1 : 
+                inventory.object_list.hammer = True
+            case 2 : 
+                inventory.object_list.crochet_kit = True
+            case 3 : 
+                inventory.object_list.metal_detector = True
+            case 4 : 
+                inventory.object_list.rabbit_foot = True
+            case 5 : 
+                inventory.object_list.apple += 1
+            case 6 : 
+                inventory.object_list.banana += 1
+            case 7 : 
+                inventory.object_list.cake += 1
+            case 8 : 
+                inventory.object_list.sandwich += 1
+            case 9 : 
+                inventory.object_list.dinner += 1
+            case 10 : 
+                inventory.keys += 1
+
+        return inventory
         
 sellable_list = [Sellable(0), Sellable(1), Sellable(2), Sellable(3), Sellable(4), Sellable(5), Sellable(6), Sellable(7),
                  Sellable(8), Sellable(9), Sellable(10)]
 
+
 def three_objects():
     global sellable_list
-    list =  np.random.choice(sellable_list, 3)
+    list =  np.random.choice(sellable_list, 3, replace = False)
     return list.tolist()
