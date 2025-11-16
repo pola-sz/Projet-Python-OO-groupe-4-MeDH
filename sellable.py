@@ -15,6 +15,15 @@ class Sellable():
         self.price = price[index]
 
     def use_object(self, inventory : Inventory) : 
+        """
+        Put the bought object into the inventory
+
+        Args:
+            inventory (Inventory): current inventory
+
+        Returns:
+            Inventory: updated inventory
+        """
         match self.index : 
             case 0 : 
                 inventory.object_list.shovel = True
@@ -67,6 +76,12 @@ sellable_list = [Sellable(0), Sellable(1), Sellable(2), Sellable(3), Sellable(4)
 
 
 def three_objects():
+    """
+    Generate a random list of three sellable items
+
+    Returns:
+        list: list of 3 sellables
+    """
     global sellable_list
     list =  np.random.choice(sellable_list, 3, replace = False)
     return list.tolist()

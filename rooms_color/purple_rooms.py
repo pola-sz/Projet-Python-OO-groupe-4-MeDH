@@ -9,6 +9,15 @@ class Bedroom(Purple_Room) :
         super().__init__("Bedroom","Rooms & Icons\Purple Rooms\Bedroom_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"},2, 1)
 
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         self.random_item_spawn(inventory)
@@ -22,6 +31,15 @@ class Boudoir(Purple_Room) :
         super().__init__("Boudoir","Rooms & Icons\Purple Rooms\Boudoir_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"},1, 0)
 
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -34,6 +52,15 @@ class Guest_Bedroom(Purple_Room) :
         super().__init__("Guest Bedroom","Rooms & Icons\Purple Rooms\Guest_Bedroom_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},1, 1)
 
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         inventory.steps += 2
@@ -48,6 +75,15 @@ class Bunk_room(Purple_Room) :
         super().__init__("Bunk room","Rooms & Icons\Purple Rooms\Bunk_Room_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},0, 1)
 
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -61,6 +97,15 @@ class Master_Bedroom(Purple_Room) :
         super().__init__("Guest Bedroom","Rooms & Icons\Purple Rooms\Guest_Bedroom_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},1, 2)
 
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -78,6 +123,15 @@ class Servants_Quarters(Purple_Room) :
         super().__init__("Servants Quarters","Rooms & Icons\Purple Rooms\Servant's_Quarters_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},2, 2)
 
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :

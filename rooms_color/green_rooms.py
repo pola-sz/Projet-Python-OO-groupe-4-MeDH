@@ -11,6 +11,15 @@ class Terrace(Green_Room):
         super().__init__("Terrace", "Rooms & Icons\Green Rooms\Terrace_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"}, 0, 1)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -23,6 +32,15 @@ class Patio(Green_Room):
         super().__init__("Patio", "Rooms & Icons\Green Rooms\Patio_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 1, 1)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -35,6 +53,15 @@ class Courtyard(Green_Room):
         super().__init__("Courtyard", "Rooms & Icons\Green Rooms\Courtyard_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"}, 1, 1)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -49,6 +76,15 @@ class Cloister(Green_Room):
             self.dig_spot = np.random.randint(2,4)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -63,6 +99,15 @@ class Veranda(Green_Room):
             self.dig_spot = np.random.randint(2,4)
 
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -75,6 +120,15 @@ class Greenhouse(Green_Room):
         super().__init__("Greenhouse", "Rooms & Icons\Green Rooms\Greenhouse_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"}, 2, 2)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -87,6 +141,15 @@ class Morning_Room(Green_Room):
         super().__init__("Morning Room", "Rooms & Icons\Green Rooms\Morning_Room_Icon.webp",{"N":"none","S":"open","E":"none","W":"open"}, 0, 3)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -100,6 +163,15 @@ class Secret_Garden(Green_Room):
         super().__init__("Secret Garden", "Rooms & Icons\Green Rooms\Secret_Garden_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"}, 0, 3)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :

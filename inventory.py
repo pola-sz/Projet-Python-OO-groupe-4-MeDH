@@ -4,7 +4,7 @@ class Inventory :
     def __init__(self):
         
         self.steps = 70
-        self.coins = 10
+        self.coins = 5
         self.coins_chance = 0
         self.gems = 2
         self.gems_chance = 0

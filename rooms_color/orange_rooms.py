@@ -10,6 +10,15 @@ class Hallway(Orange_Room) :
         super().__init__("Hallway","Rooms & Icons\Orange Rooms\Hallway_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},0, 0)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -22,6 +31,15 @@ class West_Wing_Hall(Orange_Room) :
         super().__init__("West Wing Hall","Rooms & Icons\Orange Rooms\West_Wing_Hall_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},0, 1)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -34,6 +52,15 @@ class East_Wing_Hall(Orange_Room) :
         super().__init__("East Wing Hall","Rooms & Icons\Orange Rooms\East_Wing_Hall_Icon.webp",{"N":"none","S":"open","E":"open","W":"open"},0, 2)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -46,6 +73,15 @@ class Corridor(Orange_Room) :
         super().__init__("Corridor","Rooms & Icons\Orange Rooms\Corridor_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},0, 0)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -64,6 +100,15 @@ class Passageway(Orange_Room) :
         super().__init__("Passageway","Rooms & Icons\Orange Rooms\Passageway_Icon.webp",{"N":"open","S":"open","E":"open","W":"open"},2, 0)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -76,6 +121,15 @@ class Secret_Passage(Orange_Room) :
         super().__init__("Secret Passage","Rooms & Icons\Orange Rooms\Secret_Passage_Icon.webp",{"N":"none","S":"open","E":"none","W":"none"},1, 2)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -88,6 +142,15 @@ class Foyer(Orange_Room) :
         super().__init__("Foyer","Rooms & Icons\Orange Rooms\Foyer_Icon.webp",{"N":"open","S":"open","E":"none","W":"none"},2, 2)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :
@@ -106,6 +169,15 @@ class Great_Hall(Orange_Room) :
         super().__init__("Great Hall","Rooms & Icons\Orange Rooms\Great_Hall_Icon.webp",{"N":"open","S":"open","E":"open","W":"open"},0, 2)
     
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         inventory = new_input["inventory"]
         if self.initialisation :

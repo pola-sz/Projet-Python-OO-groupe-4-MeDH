@@ -5,9 +5,6 @@ import numpy as np
 
 class Engine : 
 
-    def __init__(self) : 
-        pass
-
     def input_initialize() : 
         """
         Initialize the input dictionnary
@@ -18,7 +15,7 @@ class Engine :
         input = {"player_pos" : [2, 8],
                  "player_orient" : "N",
                  "running" : True, 
-                 "map" : Engine.initialize_map(),
+                 "map" : Engine.__initialize_map(),
                  "key_pressed" : None,
                  "inventory" : Inventory(),
                  "ask_Create_room" : False,
@@ -32,7 +29,12 @@ class Engine :
                  "shop" : None}
         return input
 
-    def initialize_map():
+    def __initialize_map():
+        """Initialize the map
+
+        Returns:
+            list: the map
+        """
         start = start_room
         end = end_room
         return [[None, None, end , None, None],
@@ -240,6 +242,16 @@ class Engine :
                 doors["E"] = temp["N"]
 
     def __askCreateRoom(current_input : dict) :
+        """
+        Interpret the input if we are in the state of asking 
+        the player which room to create
+
+        Args:
+            current_input (dict): current input
+
+        Returns:
+            dict: new input
+        """
         cursor = current_input["cursor"]
         key = current_input["key_pressed"]
         room_option = current_input["room_option"]
@@ -302,6 +314,15 @@ class Engine :
         return room_options.tolist()
     
     def __no_more_doors(map : list) :
+        """
+        Check if there are no more door
+
+        Args:
+            map (list): current map
+
+        Returns:
+            bool: has the player lost ?
+        """
         lost_flag = True
         for i in range(5):
             if i == 2 : 
@@ -349,6 +370,15 @@ class Engine :
     
 
     def __ask_unlock(current_input : dict) :
+        """
+        Check if the door is closed and acts upon it
+
+        Args:
+            current_input (dict): current input
+
+        Returns:
+            dict: new input
+        """
         pos = current_input["player_pos"]
         orient = current_input["player_orient"]
         map = current_input["map"]
@@ -374,6 +404,15 @@ class Engine :
 
         
     def __unlock(current_input : dict):
+        """Interpret the input if we are in the state of asking 
+        the player which room to create
+
+        Args:
+            current_input (dict): current input
+
+        Returns:
+            dict: new input
+        """
 
         inventory = current_input["inventory"]
         new_input = current_input.copy()
@@ -435,6 +474,16 @@ class Engine :
 
 
     def __lock_doors(input : dict, room : Rooms) :
+        """
+        Randomly locks up some doors, based on the number of rooms
+
+        Args:
+            input (dict): current input
+            room (Rooms): newly created room
+
+        Returns:
+            dict: new input
+        """
         map = input["map"]
         nb_rooms = input["nb_rooms"]
         orient = input["player_orient"]
@@ -446,7 +495,18 @@ class Engine :
         return room
 
 
-    def __is_door_locked(map : list, nb_room) : 
+    def __is_door_locked(map : list, nb_room : int) : 
+        """
+        Helper function for __lock_doors
+        Assign a state to a door
+
+        Args:
+            map (list): current map
+            nb_room (int): number of rooms in the map
+
+        Returns:
+            str: state of the door
+        """
         
         list = ["open", "locked", "dlocked"]
         proba = [1 -  (3 * nb_room) / 100, (2 * nb_room) / 100, nb_room / 100]
@@ -456,6 +516,12 @@ class Engine :
         return str(choix)
     
     def __consume(input : dict):
+        """
+        Consume an object
+
+        Args:
+            input (dict): current input
+        """
         key = input["key_pressed"]
         inv = input["inventory"]
         food = input["inventory"].object_list
@@ -517,6 +583,15 @@ class Engine :
 
         
     def __shop(current_input : dict) : 
+        """
+        Interpret the input if we are in a shop room
+
+        Args:
+            current_input (dict): current input
+
+        Returns:
+            dict: new input
+        """
 
         new_input = current_input.copy()
         inventory = current_input["inventory"]

@@ -7,6 +7,15 @@ class Yellow_Room(Rooms):
         super().__init__(name, image, doors, cost, rarity)
 
     def apply_effects(self, input : dict):
+        """
+        Apply the effects of the room
+
+        Args:
+            input (dict): current input
+
+        Returns:
+            dict : new input
+        """
         new_input = input.copy()
         if len( self.sellables) != 0 : 
             new_input["shop"] = self.sellables
